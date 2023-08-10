@@ -1,6 +1,6 @@
 
-/.bsp
-/.idea
+/bsp
+/idea
 /logs
 /RUNNING_PID
 /target
