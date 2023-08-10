@@ -11,7 +11,7 @@ create table if not exists tasks."Users" (
 -- Создание таблицы "All Tasks"
 create table if not exists tasks."All Tasks" (
                                                  "Логин" VARCHAR NOT NULL REFERENCES tasks."Users"("Логин"),
-                                                 "ID" INT NOT NULL,
+                                                 "ID" INT,
                                                  "Заголовок" VARCHAR NOT NULL,
                                                  "Описание" VARCHAR NOT NULL,
                                                  "Дедлайн" DATE NOT NULL,

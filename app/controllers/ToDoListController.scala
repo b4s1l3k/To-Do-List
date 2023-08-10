@@ -8,6 +8,7 @@ import Models.Tasks.TaskForm._
 import Models.Tasks.Task
 import Models.PrivateExecutionContext._
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 @Singleton
@@ -17,14 +18,14 @@ class ToDoListController @Inject()(cc: ControllerComponents)
   /**
    * Обертка для выполнения действий с идентификатором пользователя из сессии.
    *
-   * @param f        Функция, принимающая идентификатор пользователя и возвращающая Future с результатом.
-   * @param request  HTTP-запрос.
-   * @return         Future с результатом выполнения функции или редиректом на страницу авторизации.
+   * @param f       Функция, принимающая идентификатор пользователя и возвращающая Future с результатом.
+   * @param request HTTP-запрос.
+   * @return Future с результатом выполнения функции или редиректом на страницу авторизации.
    */
   private def withUserLogin(f: String => Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
     request.session.get("userLogin") match {
       case Some(userLogin) => f(userLogin)
-      case None => Future.successful(Redirect(routes.MainPageController.login()))
+      case None => Future.successful(Redirect(routes.MainPageController.login))
     }
   }
 
@@ -34,7 +35,7 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с HTML-страницей, содержащей список всех задач.
    */
-  def get_all(): Action[AnyContent] = Action.async { implicit request =>
+  def get_all: Action[AnyContent] = Action.async { implicit request =>
     withUserLogin { userLogin =>
       for {
         tasks <- TasksMethods.tasks(userLogin)
@@ -46,9 +47,9 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    * Действие для отображения информации о задаче по указанному идентификатору.
    * GET /tasks/:id
    *
-   * @param id  Идентификатор задачи.
-   * @return    HTTP-ответ с HTML-страницей, содержащей информацию о задаче.
-   *            Если задача с указанным идентификатором не найдена, возвращает страницу с сообщением о не найденной задаче.
+   * @param id Идентификатор задачи.
+   * @return HTTP-ответ с HTML-страницей, содержащей информацию о задаче.
+   *         Если задача с указанным идентификатором не найдена, возвращает страницу с сообщением о не найденной задаче.
    */
   def get_task(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
@@ -69,7 +70,7 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с HTML-страницей для создания новой задачи.
    */
-  def create(): Action[AnyContent] = Action { implicit request =>
+  def create: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
     Ok(views.html.tasks.createTask(taskForm))
   }
@@ -80,23 +81,31 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с результатом создания новой задачи.
    */
-  def save(): Action[AnyContent] = Action.async { implicit request =>
+  def save: Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
     withUserLogin { userLogin =>
       taskForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(views.html.tasks.createTask(formWithErrors))),
         formData => {
-          val newTask = Task(login = userLogin, id = 0, formData.title, formData.description, formData.dueDate, formData.supplement, status = false)
-            TasksMethods.createTask(userLogin, newTask.title, newTask.description, newTask.dueDate, newTask.supplement, newTask.status)
-              .map {task =>
-                TasksMethods.insertTask(task)
-                Redirect(routes.ToDoListController.get_all()).withSession("userLogin" -> userLogin)
-        }.recover {
+          if (formData.dueDate.isBefore(LocalDate.now())) {
+            lazy val formWithWrongDate = taskForm.withError("Дедлайн", "Дедлайн раньше текущей даты")
+            Future.successful(BadRequest(views.html.tasks.createTask(formWithWrongDate)))
+          } else {TasksMethods.createTask(userLogin,
+              formData.title,
+              formData.description,
+              formData.dueDate,
+              formData.supplement,
+              status = false)
+            .map { task =>
+              TasksMethods.insertTask(task)
+              Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
+            }.recover {
               case _: Throwable =>
-                val errorForm = taskForm.withGlobalError("Непредвиденная ошибка")
+                lazy val errorForm = taskForm.withGlobalError("Непредвиденная ошибка")
                 BadRequest(views.html.tasks.createTask(errorForm))
-              }
+            }
+          }
         }
       )
     }
@@ -106,9 +115,9 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    * Действие для отображения страницы редактирования задачи по указанному идентификатору.
    * GET /tasks/edit/:id
    *
-   * @param id  Идентификатор задачи.
-   * @return    HTTP-ответ с HTML-страницей для редактирования задачи.
-   *            Если задача с указанным идентификатором не найдена, возвращает страницу с сообщением о не найденной задаче.
+   * @param id Идентификатор задачи.
+   * @return HTTP-ответ с HTML-страницей для редактирования задачи.
+   *         Если задача с указанным идентификатором не найдена, возвращает страницу с сообщением о не найденной задаче.
    */
   def edit(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
@@ -129,16 +138,22 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с результатом обновления задачи.
    */
-  def update(): Action[AnyContent] = Action.async { implicit request =>
+  def update: Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
     withUserLogin { userLogin =>
       editForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(views.html.tasks.editTask(formWithErrors))),
         formData => {
-          val updatedTask = Task(login = userLogin, formData.id, formData.title, formData.description, formData.dueDate, formData.supplement, status = false)
+          val updatedTask = Task(login = userLogin,
+            formData.id,
+            formData.title,
+            formData.description,
+            formData.dueDate,
+            formData.supplement,
+            status = false)
           TasksMethods.editTask(updatedTask, userLogin).map { _ =>
-            Redirect(routes.ToDoListController.get_all()).withSession("userLogin" -> userLogin)
+            Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
           }
         }
       )
@@ -149,8 +164,8 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    * Действие для удаления задачи по указанному идентификатору.
    * GET /tasks/delete/:id
    *
-   * @param id  Идентификатор задачи для удаления.
-   * @return    HTTP-ответ с результатом удаления задачи.
+   * @param id Идентификатор задачи для удаления.
+   * @return HTTP-ответ с результатом удаления задачи.
    */
   def delete_one(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
@@ -176,7 +191,7 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с HTML-страницей, содержащей список удаленных задач.
    */
-  def deleted(): Action[AnyContent] = Action.async { implicit request =>
+  def deleted: Action[AnyContent] = Action.async { implicit request =>
     withUserLogin { userLogin =>
       for {
         doneTask <- TasksMethods.doneTasks(userLogin)
@@ -188,13 +203,13 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    * Действие для очистки указанной таблицы в базе данных.
    * GET /clear/:tableName
    *
-   * @param table  Имя таблицы, которую необходимо очистить.
-   * @return       HTTP-ответ с редиректом на страницу со списком всех задач.
+   * @param table Имя таблицы, которую необходимо очистить.
+   * @return HTTP-ответ с редиректом на страницу со списком всех задач.
    */
   def clear(table: String): Action[AnyContent] = Action.async { implicit request =>
     withUserLogin { userLogin =>
       TasksMethods.clearTable(table, userLogin).map { _ =>
-        Redirect(routes.ToDoListController.get_all()).withSession("userLogin" -> userLogin)
+        Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
       }
     }
   }
@@ -204,7 +219,7 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    * Этот метод не имеет реализации и используется для отладки.
    * Не используйте этот метод в финальной версии приложения.
    *
-   * @return  HTTP-ответ (пустое тело).
+   * @return HTTP-ответ (пустое тело).
    */
-  def debugToDoList(): Action[AnyContent] = ???
+  def debugToDoList: Action[AnyContent] = ???
 }

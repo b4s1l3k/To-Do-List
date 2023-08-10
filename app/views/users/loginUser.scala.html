@@ -63,7 +63,7 @@
     <body>
         <div class="form-container">
             <h2>Авторизация пользователя</h2>
-            @helper.form(action = helper.CSRF(routes.MainPageController.login())) {
+            @helper.form(action = helper.CSRF(routes.MainPageController.login)) {
                 @helper.CSRF.formField
                 <div class="form-group">
                 @helper.inputText(userForm("Логин"))

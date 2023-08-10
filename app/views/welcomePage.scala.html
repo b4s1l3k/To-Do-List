@@ -66,10 +66,10 @@
             <h1>Добро пожаловать в To-Do List!</h1>
             <p class="description">Вы попали на стартовую страницу приложения. Здесь вы можете начать использование сервиса, выбрав одну из опций:</p>
             <div class="buttons">
-                <form action="@routes.MainPageController.showLoginForm()" method="get">
+                <form action="@routes.MainPageController.showLoginForm" method="get">
                     <button class="button login" type="submit">Вход</button>
                 </form>
-                <form action="@routes.MainPageController.showRegistrationForm()" method="get">
+                <form action="@routes.MainPageController.showRegistrationForm" method="get">
                     <button class="button register" type="submit">Регистрация</button>
                 </form>
             </div>

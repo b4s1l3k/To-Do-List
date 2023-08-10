@@ -2,13 +2,14 @@ package controllers
 
 import play.api.i18n.Messages
 import play.api.mvc._
-import javax.inject._
 
+import javax.inject._
 import Models.Tasks._
 import Models.Users._
 import Models.Users.UserForm._
 import Models.PrivateExecutionContext._
 import Models.Users.UsersMethods
+import org.mindrot.jbcrypt.BCrypt
 
 import scala.concurrent.Future
 
@@ -17,12 +18,23 @@ class MainPageController @Inject()(cc: ControllerComponents)
   extends AbstractController(cc) {
 
   /**
+   * Метод для хеширования пароля пользователя.
+   *
+   * @param password Пароль пользователя для хеширования.
+   * @return Захешированный пароль.
+   */
+  private def hashingPassword(password: String): String = {
+    lazy val logRounds = 10
+    BCrypt.hashpw(password, BCrypt.gensalt(logRounds))
+  }
+
+  /**
    * Действие для отображения страницы регистрации пользователя.
    * GET /register
    *
    * @return HTTP-ответ с HTML-страницей для регистрации пользователя.
    */
-  def showRegistrationForm(): Action[AnyContent] = Action { implicit request =>
+  def showRegistrationForm: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
     Ok(views.html.users.registerUser(userForm))
@@ -38,7 +50,7 @@ class MainPageController @Inject()(cc: ControllerComponents)
    *           перенаправляет на страницу создания перовго задания.
    *         - Если произошла непредвиденная ошибка, возвращает страницу регистрации с общей ошибкой.
    */
-  def saveUser(): Action[AnyContent] = Action.async { implicit request =>
+  def saveUser: Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
     userForm.bindFromRequest().fold(
@@ -51,11 +63,11 @@ class MainPageController @Inject()(cc: ControllerComponents)
             Future.successful(BadRequest(views.html.users.registerUser(formWithDuplicateLoginError)))
           } else {
             // Регистрируем пользователя и перенаправляем на страницу входа
-            val hashedPassword = UsersMethods.hashingPassword(userData.password)
+            val hashedPassword = hashingPassword(userData.password)
             Future.successful(User(userData.login, hashedPassword))
               .map { user =>
                 UsersMethods.insertUser(user)
-                Redirect(routes.MainPageController.firstTask()).withSession("userLogin" -> userData.login)
+                Redirect(routes.MainPageController.firstTask).withSession("userLogin" -> userData.login)
               }.recover {
                 case _: Throwable =>
                   val errorForm = userForm.withGlobalError("Непредвиденная ошибка")
@@ -73,7 +85,7 @@ class MainPageController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с HTML-страницей для входа пользователя.
    */
-  def showLoginForm(): Action[AnyContent] = Action { implicit request =>
+  def showLoginForm: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
     Ok(views.html.users.loginUser(userForm))
@@ -88,7 +100,7 @@ class MainPageController @Inject()(cc: ControllerComponents)
    *         - Если вход выполнен успешно (логин и пароль совпадают), перенаправляет на страницу со всеми задачами пользователя.
    *         - Если пароль неверный, возвращает страницу входа с ошибкой валидации.
    */
-  def login(): Action[AnyContent] = Action.async { implicit request =>
+  def login: Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
     userForm.bindFromRequest().fold(
@@ -97,7 +109,7 @@ class MainPageController @Inject()(cc: ControllerComponents)
         UsersMethods.checkUserPassword(userData.login, userData.password).flatMap { correctPassword =>
           if (correctPassword) {
             // Пароль верный, перенаправляем на главную страницу
-              Future.successful(Redirect(routes.ToDoListController.get_all()).withSession("userLogin" -> userData.login))
+            Future.successful(Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userData.login))
 
           } else {
             // Пароль неверный, добавляем ошибку к форме userForm
@@ -118,7 +130,7 @@ class MainPageController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с HTML-страницей для создания первого задания.
    */
-  def firstTask(): Action[AnyContent] = Action { implicit request =>
+  def firstTask: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
     Ok(views.html.users.index(TaskForm.taskForm))
@@ -130,7 +142,7 @@ class MainPageController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с HTML-страницей для авторизации или регистрации.
    */
-  def weclomePage(): Action[AnyContent] = Action { implicit request =>
+  def weclomePage: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
     Ok(views.html.welcomePage("Filler. Need to fix"))
@@ -142,12 +154,18 @@ class MainPageController @Inject()(cc: ControllerComponents)
    *
    * @return HTTP-ответ с HTML-страницей для авторизации или регистрации.
    */
-  def logout(): Action[AnyContent] = Action {
+  def logout: Action[AnyContent] = Action {
 
-    Redirect(routes.MainPageController.weclomePage()).withSession()
+    Redirect(routes.MainPageController.weclomePage).withSession()
   }
 
-  // Действие для отображения страницы с отладочной информацией о пользователях (не реализовано)
+  /**
+   * Debug метод (пустое тело метода).
+   * Этот метод не имеет реализации и используется для отладки.
+   * Не используйте этот метод в финальной версии приложения.
+   *
+   * @return HTTP-ответ (пустое тело).
+   */
   def debugUsers: Action[AnyContent] = ???
 
 }

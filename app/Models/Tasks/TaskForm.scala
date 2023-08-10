@@ -9,7 +9,7 @@ object TaskForm {
   val taskForm: Form[Task] = Form {
     mapping(
       "login" -> ignored(""),
-      "id" -> ignored(0),
+      "id" -> optional(ignored(0)),
       "Задача" -> nonEmptyText,
       "Описание" -> nonEmptyText,
       "Дедлайн" -> localDate,
@@ -21,7 +21,7 @@ object TaskForm {
   val editForm: Form[Task] = Form {
     mapping(
       "login" -> text,
-      "id" -> number,
+      "id" -> optional(number),
       "Задача" -> nonEmptyText,
       "Описание" -> nonEmptyText,
       "Дедлайн" -> localDate,

@@ -46,7 +46,7 @@
 </head>
 <body>
 <h1>Редактирование задачи</h1>
-@helper.form(action = helper.CSRF(routes.ToDoListController.update())) {
+@helper.form(action = helper.CSRF(routes.ToDoListController.update)) {
 
     <input type="hidden" name="@editForm("login").name" value="@editForm("login").value">
     <input type="hidden" name="@editForm("id").name" value="@editForm("id").value">

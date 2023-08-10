@@ -108,13 +108,13 @@
                     <td>@task.dueDate</td>
                     <td>@task.supplement.getOrElse("")</td>
                     <td class="add-edit-details-buttons">
-                        <form action="@routes.ToDoListController.delete_one(task.id)" method="GET">
+                        <form action="@routes.ToDoListController.delete_one(task.id.get)" method="GET">
                             <input type="submit" value="Решена">
                         </form>
-                        <form action="@routes.ToDoListController.get_task(task.id)" method="GET">
+                        <form action="@routes.ToDoListController.get_task(task.id.get)" method="GET">
                             <input type="submit" value="Детали">
                         </form>
-                        <form action="@routes.ToDoListController.edit(task.id)" method="GET">
+                        <form action="@routes.ToDoListController.edit(task.id.get)" method="GET">
                             <input type="submit" value="Редактировать">
                         </form>
                     </td>
@@ -123,7 +123,7 @@
             </table>
         <div class="buttons-container">
             <div class="add-button">
-                <form action="@routes.ToDoListController.create()" method="GET">
+                <form action="@routes.ToDoListController.create" method="GET">
                     <input type="submit" value="Добавить задачу">
                 </form>
             </div>
@@ -133,12 +133,12 @@
                 </form>
             </div>
             <div class="deleted-tasks-button">
-                <form action="@routes.ToDoListController.deleted()" method="GET">
+                <form action="@routes.ToDoListController.deleted" method="GET">
                     <input type="submit" value="Решенные задачи">
                 </form>
             </div>
             <div class="logout-button">
-                <form action="@routes.MainPageController.logout()" method="GET">
+                <form action="@routes.MainPageController.logout" method="GET">
                     <input type="submit" value="Выход">
                 </form>
             </div>

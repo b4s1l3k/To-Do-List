@@ -6,7 +6,10 @@ import java.time.LocalDate
 import scala.concurrent.Future
 import Models.PrivateExecutionContext._
 import Models.Connection._
+import SlickTablesTask._
+import Models.Users.SlickTablesUser._
 
+import scala.math.Ordered.orderingToOrdered
 import scala.util.{Failure, Success}
 
 object TasksMethods {
@@ -20,16 +23,22 @@ object TasksMethods {
    * @param dueDate     Дедлайн задачи.
    * @param supplement  Дополнительная информация (опционально).
    * @param status      Статус задачи (false - активна).
-   * @return Future с созданной задачей.
+   * @return Future с созданной задачей c уникальным id задачи.
    */
-  def createTask(login: String, title: String, description: String, dueDate: LocalDate, supplement: Option[String], status: Boolean): Future[Task] = {
+  def createTask(login: String,
+                 title: String,
+                 description: String,
+                 dueDate: LocalDate,
+                 supplement: Option[String],
+                 status: Boolean): Future[Task] = {
+
     tasks(login).map { listOfTasks =>
-      val nextTaskId = if (listOfTasks.isEmpty || listOfTasks.headOption.exists(_.id != 1)) {
+      val nextTaskId = if (listOfTasks.isEmpty || listOfTasks.headOption.exists(_.id.getOrElse(0) != 1)) {
         1
       } else {
-        listOfTasks.map(_.id).max + 1
+        listOfTasks.map(_.id.getOrElse(0)).max + 1
       }
-      Task(login, nextTaskId, title, description, dueDate, supplement, status)
+      Task(login, Some(nextTaskId), title, description, dueDate, supplement, status)
     }
   }
 
@@ -40,7 +49,7 @@ object TasksMethods {
    * @return Future с последовательностью активных задач.
    */
   def tasks(login: String): Future[Seq[Task]] = {
-    val queryDescription = SlickTablesTask.taskTable
+    val queryDescription = taskTable
       .filter(task => task.login === login && task.status === false)
       .sortBy(_.id)
       .result
@@ -58,7 +67,7 @@ object TasksMethods {
    * @return Future с последовательностью выполненых задач.
    */
   def doneTasks(login: String): Future[Seq[Task]] = {
-    val queryDescription = SlickTablesTask.taskTable
+    val queryDescription = taskTable
       .filter(task => task.login === login && task.status === true)
       .result
 
@@ -75,7 +84,7 @@ object TasksMethods {
    * @return Future с результатом вставки.
    */
   def insertTask(task: Task): Unit = {
-    val queryDescription = SlickTablesTask.taskTable += task
+    val queryDescription = taskTable += task
 
     Connection.db.run(queryDescription).onComplete {
       case Success(_) => println(s"A new task has been added! Title: ${task.title}")
@@ -90,8 +99,8 @@ object TasksMethods {
    * @return Future с результатом удаления.
    */
   def deleteTask(task: Task): Unit = {
-    val deletedTask = task.copy(id = 0, status = true)
-    val queryDescription = SlickTablesTask.taskTable
+    val deletedTask = task.copy(id = None, status = true)
+    val queryDescription = taskTable
       .filter(t => t.login === task.login && t.id === task.id && t.status === false)
       .update(deletedTask)
 
@@ -111,7 +120,7 @@ object TasksMethods {
    */
   def readOneTask(id: Int, login: String): Future[Task] = {
     tasks(login).flatMap { taskList =>
-      taskList.find(_.id == id) match {
+      taskList.find(_.id.contains(id)) match {
         case Some(task) =>
           println(s"The following task were retrieved from the database: $task.")
           Future.successful(task)
@@ -134,7 +143,7 @@ object TasksMethods {
     tasks(login).map { allTasks =>
       allTasks.find(_.id == task.id) match {
         case Some(_) =>
-          val queryDescriptor = SlickTablesTask.taskTable
+          val queryDescriptor = taskTable
             .filter(_.id === task.id)
             .update(task)
           Connection.db.run(queryDescriptor).onComplete {
@@ -161,10 +170,12 @@ object TasksMethods {
       case "clearTasks" =>
 
         tasks(login).flatMap { tasks =>
-          val updatedTasks = tasks.filter(_.status == false).map(task => task.copy(id = 0, status = true))
+          val updatedTasks = tasks
+            .filter(_.status == false)
+            .map(task => task.copy(id = None, status = true))
           val updateQueries = DBIO.seq(
-            SlickTablesTask.taskTable ++= updatedTasks,
-            SlickTablesTask.taskTable.filter(task => task.login === login && task.status === false).delete
+            taskTable ++= updatedTasks,
+            taskTable.filter(task => task.login === login && task.status === false).delete
           )
           Connection.db.run(updateQueries).map(_ => ()).recover {
             case ex => println(s"Failed to clear tasks: ${ex.getMessage}")
@@ -182,5 +193,5 @@ object TasksMethods {
         }
     }
   }
-  
+
 }

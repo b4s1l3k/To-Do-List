@@ -8,6 +8,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 import Models.PrivateExecutionContext._
 import Models.Connection._
+import SlickTablesUser._
 
 object UsersMethods {
 
@@ -18,7 +19,7 @@ object UsersMethods {
    */
   def users: Future[Seq[User]] = {
     // Формируем запрос к базе данных для получение всех пользователей.
-    val queryDescription = SlickTablesUser.userTable.result
+    val queryDescription = userTable.result
     // Выполняем запрос к базе данных и выводим результат или ошибку.
     Connection.db.run(queryDescription).andThen {
       case Success(users) => println(s"The following users were retrieved from the database: $users.")
@@ -33,7 +34,7 @@ object UsersMethods {
    */
   def insertUser(user: User): Unit = {
     // Формируем запрос на вставку нового пользователя в базу данных.
-    val queryDescription = SlickTablesUser.userTable += user
+    val queryDescription = userTable += user
     // Выполняем запрос к базе данных и выводим результат или ошибку.
     Connection.db.run(queryDescription).onComplete {
       case Success(_) => println(s"A new user has been added! Login: ${user.login}")
@@ -49,7 +50,7 @@ object UsersMethods {
    */
   def checkUserByLogin(login: String): Future[Boolean] = {
     // Формируем запрос к базе данных для проверки наличия пользователя с указанным логином.
-    val queryDescription = SlickTablesUser.userTable.filter(_.login === login).exists.result
+    val queryDescription = userTable.filter(_.login === login).exists.result
     // Выполняем запрос к базе данных и возвращаем результат (true, если такой логин уже занят, и false, если логин уникален).
     Connection.db.run(queryDescription)
   }
@@ -64,7 +65,7 @@ object UsersMethods {
    */
   def checkUserPassword(login: String, password: String): Future[Boolean] = {
     // Формируем запрос к базе данных для получения хеша пароля пользователя.
-    val queryPasswordHash = SlickTablesUser.userTable
+    val queryPasswordHash = userTable
       .filter(user => user.login === login)
       .map(_.password)
       .result
@@ -72,15 +73,10 @@ object UsersMethods {
 
     // Выполняем запрос к базе данных для получения хеша пароля.
     val passwordHashFuture: Future[String] = Connection.db.run(queryPasswordHash)
-
     // Проверяем соответствие пароля.
     passwordHashFuture.map { hashedPassword =>
       BCrypt.checkpw(password, hashedPassword)
     }
-  }
-
-  def hashingPassword(password: String): String = {
-    BCrypt.hashpw(password, BCrypt.gensalt(10))
   }
 
 }
