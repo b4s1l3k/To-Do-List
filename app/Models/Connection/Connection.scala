@@ -3,5 +3,6 @@ package Models.Connection
 import slick.jdbc.PostgresProfile.api._
 
 object Connection {
-  val db = Database.forConfig("postgres")
+  lazy val dbType = "postgres"
+  val db = Database.forConfig(dbType)
 }

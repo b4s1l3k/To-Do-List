@@ -9,7 +9,7 @@ object SlickTablesTask {
 
   class TaskTable(tag: Tag) extends Table[Task](tag, Some("tasks"), "All Tasks") {
     def login = column[String]("Логин")
-    def id = column[Int]("ID")
+    def id = column[Int]("ID", O.PrimaryKey)
     def title = column[String]("Заголовок")
     def description = column[String]("Описание")
     def dueDate = column[LocalDate]("Дедлайн")

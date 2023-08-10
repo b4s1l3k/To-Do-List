@@ -5,6 +5,7 @@ import play.api.mvc._
 import javax.inject._
 
 import Models.Tasks._
+import Models.Users._
 import Models.Users.UserForm._
 import Models.PrivateExecutionContext._
 import Models.Users.UsersMethods
@@ -51,7 +52,7 @@ class MainPageController @Inject()(cc: ControllerComponents)
           } else {
             // Регистрируем пользователя и перенаправляем на страницу входа
             val hashedPassword = UsersMethods.hashingPassword(userData.password)
-            UsersMethods.createUser(userData.login, hashedPassword)
+            Future.successful(User(userData.login, hashedPassword))
               .map { user =>
                 UsersMethods.insertUser(user)
                 Redirect(routes.MainPageController.firstTask()).withSession("userLogin" -> userData.login)

@@ -12,28 +12,6 @@ import Models.Connection._
 object UsersMethods {
 
   /**
-   * Метод для создания нового пользователя с заданным логином и паролем.
-   *
-   * @param login    Логин нового пользователя.
-   * @param password Пароль нового пользователя.
-   * @return Фьючерс с созданным пользователем.
-   */
-  def createUser(login: String, password: String): Future[User] = {
-
-    users.flatMap { listOfUsers =>
-      val nextUserId = if (listOfUsers.isEmpty || listOfUsers.head.userId != 1) {
-        // Если первый id в listOfUsers не равен 1, или если listOfUsers пуст, то используем значение 1 для userId.
-        1
-      } else {
-        // Генерируем уникальный идентификатор пользователя, увеличивая максимальный идентификатор на 1.
-        listOfUsers.map(_.userId).max + 1
-      }
-      // Создаем и возвращаем нового пользователя со сгенерированным идентификатором.
-      Future.successful(User(nextUserId, login, password))
-    }
-  }
-
-  /**
    * Метод для получения списка всех пользователей из базы данных.
    *
    * @return Фьючерс со списком пользователей.

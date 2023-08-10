@@ -8,7 +8,6 @@ object UserForm {
 
   val userForm: Form[User] = Form {
     mapping(
-      "userId" -> ignored(0),
       "Логин" -> nonEmptyText,
       "Пароль" -> nonEmptyText
     )(User.apply)(User.unapply)
