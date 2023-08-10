@@ -1,0 +1,3 @@
+[debug] Copy resource mappings: 
+[debug] 	(C:\Scala\To-Do-List\conf\application.conf,C:\Scala\To-Do-List\target\scala-2.13\classes\application.conf)
+[debug] 	(C:\Scala\To-Do-List\conf\routes,C:\Scala\To-Do-List\target\scala-2.13\classes\routes)

@@ -1,0 +1,202 @@
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 20 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] Non-compiled module 'compiler-bridge_2.13' for Scala 2.13.11. Compiling...
+[info]   Compilation completed in 12.747s.
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:17:25: not found: value taskForm
+[error]     Ok(views.html.index(taskForm))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:17:16: not found: value TasksMethods
+[error]       tasks <- TasksMethods.tasks
+[error]                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:24:5: not found: value TasksMethods
+[error]     TasksMethods.readOneTask(id).map { task =>
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:34:36: not found: value taskForm
+[error]     Ok(views.html.tasks.createTask(taskForm))
+[error]                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:40:5: not found: value taskForm
+[error]     taskForm.bindFromRequest().fold(
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:43:9: not found: value TasksMethods
+[error]         TasksMethods.createTask(formData.title, formData.description, formData.dueDate, formData.supplement).map { task =>
+[error]         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:44:11: not found: value TasksMethods
+[error]           TasksMethods.insertTask(task)
+[error]           ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:48:29: not found: value taskForm
+[error]             val errorForm = taskForm.withGlobalError("Непредвиденная ошибка")
+[error]                             ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:58:5: not found: value TasksMethods
+[error]     TasksMethods.readOneTask(id).map { task =>
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:59:36: not found: value editForm
+[error]       Ok(views.html.tasks.editTask(editForm.fill(task)))
+[error]                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:69:5: not found: value editForm
+[error]     editForm.bindFromRequest().fold(
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:72:27: not found: value Task
+[error]         val updatedTask = Task(formData.id, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                           ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:73:9: not found: value TasksMethods
+[error]         TasksMethods.editTask(updatedTask).map { _ =>
+[error]         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:77:29: not found: value editForm
+[error]             val errorForm = editForm.withGlobalError("Непредвиденная ошибка")
+[error]                             ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:87:23: not found: value TasksMethods
+[error]     val deletedTask = TasksMethods.readOneTask(id)
+[error]                       ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:88:5: not found: value TasksMethods
+[error]     TasksMethods.insertDeletedTask(deletedTask)
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:89:5: not found: value TasksMethods
+[error]     TasksMethods.deleteTask(id)
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:100:22: not found: value TasksMethods
+[error]       deletedTask <- TasksMethods.deletedTasks
+[error]                      ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:105:5: not found: value TasksMethods
+[error]     TasksMethods.clearTable(table)
+[error]     ^
+[error] 19 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 20 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:17:25: not found: value taskForm
+[error]     Ok(views.html.index(taskForm))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:17:16: not found: value TasksMethods
+[error]       tasks <- TasksMethods.tasks
+[error]                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:24:5: not found: value TasksMethods
+[error]     TasksMethods.readOneTask(id).map { task =>
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:34:36: not found: value taskForm
+[error]     Ok(views.html.tasks.createTask(taskForm))
+[error]                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:40:5: not found: value taskForm
+[error]     taskForm.bindFromRequest().fold(
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:43:9: not found: value TasksMethods
+[error]         TasksMethods.createTask(formData.title, formData.description, formData.dueDate, formData.supplement).map { task =>
+[error]         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:44:11: not found: value TasksMethods
+[error]           TasksMethods.insertTask(task)
+[error]           ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:48:29: not found: value taskForm
+[error]             val errorForm = taskForm.withGlobalError("Непредвиденная ошибка")
+[error]                             ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:58:5: not found: value TasksMethods
+[error]     TasksMethods.readOneTask(id).map { task =>
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:59:36: not found: value editForm
+[error]       Ok(views.html.tasks.editTask(editForm.fill(task)))
+[error]                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:69:5: not found: value editForm
+[error]     editForm.bindFromRequest().fold(
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:72:27: not found: value Task
+[error]         val updatedTask = Task(formData.id, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                           ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:73:9: not found: value TasksMethods
+[error]         TasksMethods.editTask(updatedTask).map { _ =>
+[error]         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:77:29: not found: value editForm
+[error]             val errorForm = editForm.withGlobalError("Непредвиденная ошибка")
+[error]                             ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:87:23: not found: value TasksMethods
+[error]     val deletedTask = TasksMethods.readOneTask(id)
+[error]                       ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:88:5: not found: value TasksMethods
+[error]     TasksMethods.insertDeletedTask(deletedTask)
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:89:5: not found: value TasksMethods
+[error]     TasksMethods.deleteTask(id)
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:100:22: not found: value TasksMethods
+[error]       deletedTask <- TasksMethods.deletedTasks
+[error]                      ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:105:5: not found: value TasksMethods
+[error]     TasksMethods.clearTable(table)
+[error]     ^
+[error] 19 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 20 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:17:16: not found: value TasksMethods
+[error]       tasks <- TasksMethods.tasks
+[error]                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:24:5: not found: value TasksMethods
+[error]     TasksMethods.readOneTask(id).map { task =>
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:34:36: not found: value taskForm
+[error]     Ok(views.html.tasks.createTask(taskForm))
+[error]                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:40:5: not found: value taskForm
+[error]     taskForm.bindFromRequest().fold(
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:43:9: not found: value TasksMethods
+[error]         TasksMethods.createTask(formData.title, formData.description, formData.dueDate, formData.supplement).map { task =>
+[error]         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:44:11: not found: value TasksMethods
+[error]           TasksMethods.insertTask(task)
+[error]           ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:48:29: not found: value taskForm
+[error]             val errorForm = taskForm.withGlobalError("Непредвиденная ошибка")
+[error]                             ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:58:5: not found: value TasksMethods
+[error]     TasksMethods.readOneTask(id).map { task =>
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:59:36: not found: value editForm
+[error]       Ok(views.html.tasks.editTask(editForm.fill(task)))
+[error]                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:69:5: not found: value editForm
+[error]     editForm.bindFromRequest().fold(
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:72:27: not found: value Task
+[error]         val updatedTask = Task(formData.id, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                           ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:73:9: not found: value TasksMethods
+[error]         TasksMethods.editTask(updatedTask).map { _ =>
+[error]         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:77:29: not found: value editForm
+[error]             val errorForm = editForm.withGlobalError("Непредвиденная ошибка")
+[error]                             ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:87:23: not found: value TasksMethods
+[error]     val deletedTask = TasksMethods.readOneTask(id)
+[error]                       ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:88:5: not found: value TasksMethods
+[error]     TasksMethods.insertDeletedTask(deletedTask)
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:89:5: not found: value TasksMethods
+[error]     TasksMethods.deleteTask(id)
+[error]     ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:100:22: not found: value TasksMethods
+[error]       deletedTask <- TasksMethods.deletedTasks
+[error]                      ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:105:5: not found: value TasksMethods
+[error]     TasksMethods.clearTable(table)
+[error]     ^
+[error] 18 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 20 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Canceling execution...
+[error] Cancelled: run
+[error] Cancelled: run
+[error] Use 'last' for the full log.
+[debug] > Exec(idea-shell, None, None)

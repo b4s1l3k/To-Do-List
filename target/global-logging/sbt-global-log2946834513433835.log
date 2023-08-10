@@ -1,0 +1,41 @@
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 4 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:139:9: '}' expected but 'case' found.
+[error]         case None =>
+[error]         ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:141:5: Unmatched closing brace '}' ignored here
+[error]     }
+[error]     ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:154:11: Unmatched closing brace '}' ignored here
+[error]           }
+[error]           ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:155:9: 'case' expected but '}' found.
+[error]         }
+[error]         ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:157:7: '}' expected but 'case' found.
+[error]       case "clearDoneTasks" =>
+[error]       ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:167:3: eof expected but '}' found.
+[error]   }
+[error]   ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:136:11: Unmatched closing brace '}' ignored here
+[error]           }
+[error]           ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:138:7: ';' expected but ')' found.
+[error]       )
+[error]       ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:140:3: eof expected but '}' found.
+[error]   }
+[error]   ^
+[error] 9 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Canceling execution...
+[error] Cancelled: run
+[error] Cancelled: run
+[error] Use 'last' for the full log.
+[debug] > Exec(idea-shell, None, None)

@@ -1,0 +1,114 @@
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 3 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 20 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:3:15: object TaskForm is not a member of package Models
+[error] import Models.TaskForm.taskForm
+[error]               ^
+[error] C:\Scala\To-Do List\app\views\index.scala.html:1:1: type Task is not a member of package Models
+[error] @(taskForm: Form[Models.Task])(implicit messages: Messages, request: RequestHeader)
+[error] ^
+[error] C:\Scala\To-Do List\app\views\index.scala.html:1:25: type Task is not a member of package Models
+[error] @(taskForm: Form[Models.Task])(implicit messages: Messages, request: RequestHeader)
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:17:25: not found: value taskForm
+[error]     Ok(views.html.index(taskForm))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\views\tasks\listOfTasks.scala.html:1:1: type Task is not a member of package Models
+[error] @(tasks: Seq[Models.Task])
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\listOfTasks.scala.html:1:21: type Task is not a member of package Models
+[error] @(tasks: Seq[Models.Task])
+[error]                     ^
+[error] C:\Scala\To-Do List\app\views\tasks\taskDetails.scala.html:1:1: type Task is not a member of package Models
+[error] @(task: Models.Task)
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\taskDetails.scala.html:1:16: type Task is not a member of package Models
+[error] @(task: Models.Task)
+[error]                ^
+[error] C:\Scala\To-Do List\app\views\tasks\createTask.scala.html:1:1: type Task is not a member of package Models
+[error] @(taskForm: Form[Models.Task])(implicit messages: Messages, request: RequestHeader)
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\createTask.scala.html:1:25: type Task is not a member of package Models
+[error] @(taskForm: Form[Models.Task])(implicit messages: Messages, request: RequestHeader)
+[error]                         ^
+[error] C:\Scala\To-Do List\app\views\tasks\editTask.scala.html:1:1: type Task is not a member of package Models
+[error] @(editForm: Form[Models.Task])(implicit messages: Messages, request: RequestHeader)
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\editTask.scala.html:1:25: type Task is not a member of package Models
+[error] @(editForm: Form[Models.Task])(implicit messages: Messages, request: RequestHeader)
+[error]                         ^
+[error] C:\Scala\To-Do List\app\views\tasks\deleteResult.scala.html:1:1: type Task is not a member of package Models
+[error] @(deletedTask: Models.Task, remainingTasks: Seq[Models.Task])(implicit messages: Messages)
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\deleteResult.scala.html:1:23: type Task is not a member of package Models
+[error] @(deletedTask: Models.Task, remainingTasks: Seq[Models.Task])(implicit messages: Messages)
+[error]                       ^
+[error] C:\Scala\To-Do List\app\views\tasks\deleteResult.scala.html:1:56: type Task is not a member of package Models
+[error] @(deletedTask: Models.Task, remainingTasks: Seq[Models.Task])(implicit messages: Messages)
+[error]                                                        ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:1:1: type DeletedTask is not a member of package Models
+[error] @(deletedTasks: Seq[Models.DeletedTask])
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:1:28: type DeletedTask is not a member of package Models
+[error] @(deletedTasks: Seq[Models.DeletedTask])
+[error]                            ^
+[error] C:\Scala\To-Do List\app\views\index.scala.html:72:8: type Task is not a member of package Models
+[error] </html>
+[error]        ^
+[error] C:\Scala\To-Do List\app\views\tasks\createTask.scala.html:65:9: type Task is not a member of package Models
+[error] </html>
+[error]        ^
+[error] C:\Scala\To-Do List\app\views\tasks\deleteResult.scala.html:84:9: type Task is not a member of package Models
+[error] </html>
+[error]        ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:91:9: type DeletedTask is not a member of package Models
+[error] </html>
+[error]        ^
+[error] C:\Scala\To-Do List\app\views\tasks\editTask.scala.html:68:9: type Task is not a member of package Models
+[error] </html>
+[error]        ^
+[error] C:\Scala\To-Do List\app\views\tasks\listOfTasks.scala.html:140:9: type Task is not a member of package Models
+[error] </html>
+[error]        ^
+[error] C:\Scala\To-Do List\app\views\tasks\taskDetails.scala.html:57:9: type Task is not a member of package Models
+[error] </html>
+[error]        ^
+[error] 24 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 20 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:3:15: object TaskForm is not a member of package Models
+[error] import Models.TaskForm.taskForm
+[error]               ^
+[error] C:\Scala\To-Do List\app\views\index.scala.html:1:1: type Task is not a member of package Models
+[error] @(taskForm: Form[Models.Task])(implicit messages: Messages, request: RequestHeader)
+[error] ^
+[error] C:\Scala\To-Do List\app\views\index.scala.html:1:25: type Task is not a member of package Models
+[error] @(taskForm: Form[Models.Task])(implicit messages: Messages, request: RequestHeader)
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:17:25: not found: value taskForm
+[error]     Ok(views.html.index(taskForm))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\views\index.scala.html:72:8: type Task is not a member of package Models
+[error] </html>
+[error]        ^
+[error] 5 errors found
+[debug] Forcing garbage collection...
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Canceling execution...
+[error] Cancelled: run
+[error] Cancelled: run
+[error] Use 'last' for the full log.
+[debug] > Exec(idea-shell, None, None)

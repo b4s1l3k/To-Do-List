@@ -1,0 +1,68 @@
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 6 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Users\UserForm.scala:14:12: type mismatch;
+[error]  found   : (Int, String, String) => Models.Users.User
+[error]  required: (Unit, String, String) => ?
+[error]     )(User.apply)(User.unapply)
+[error]            ^
+[error] C:\Scala\To-Do List\app\Models\Users\UserForm.scala:14:24: missing argument list for method unapply in object User
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `unapply _` or `unapply(_)` instead of `unapply`.
+[error]     )(User.apply)(User.unapply)
+[error]                        ^
+[error] C:\Scala\To-Do List\app\Models\Users\UserForm.scala:11:26: adaptation of an empty argument list by inserting () is deprecated: this is unlikely to be what you want
+[error]         signature: Forms.ignored[A](value: A): play.api.data.Mapping[A]
+[error]   given arguments: <none>
+[error]  after adaptation: Forms.ignored((): Unit)
+[error]       "userId" -> ignored(),
+[error]                          ^
+[error] three errors found
+[debug] Forcing garbage collection...
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 6 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 6 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\PrivateMethods.scala:26:70: Cannot perform option-mapped operation
+[error]       with type: (Int, String) => R
+[error]   for base type: (Int, Int) => Boolean
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                                      ^
+[error] C:\Scala\To-Do List\app\Models\PrivateMethods.scala:26:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                            ^
+[error] two errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 7 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 5 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Canceling execution...
+[error] Cancelled: run
+[error] Cancelled: run
+[error] Use 'last' for the full log.
+[debug] > Exec(idea-shell, None, None)

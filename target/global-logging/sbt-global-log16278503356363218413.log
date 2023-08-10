@@ -1,0 +1,221 @@
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 5 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\PrivateMethods.scala:5:8: object SlickTablesDeletedTask is not a member of package Models.Tasks
+[error] import Models.Tasks.{SlickTablesDeletedTask, SlickTablesTask}
+[error]        ^
+[error] C:\Scala\To-Do List\app\Models\PrivateMethods.scala:16:30: not found: value SlickTablesDeletedTask
+[error]     val deleteDeletedTasks = SlickTablesDeletedTask.deletedTasksTable.delete
+[error]                              ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:57:54: an expression of type Null is ineligible for implicit conversion
+[error]           val newTask = Task(login = userLogin, id = null, formData.title, formData.description, formData.dueDate, formData.supplement, status = false)
+[error]                                                      ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:1:1: type DeletedTask is not a member of package Models.Tasks
+[error] @(deletedTasks: Seq[Models.Tasks.DeletedTask])
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:1:34: type DeletedTask is not a member of package Models.Tasks
+[error] @(deletedTasks: Seq[Models.Tasks.DeletedTask])
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:92:9: type DeletedTask is not a member of package Models.Tasks
+[error] </html>
+[error]        ^
+[error] 6 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 5 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:57:54: an expression of type Null is ineligible for implicit conversion
+[error]           val newTask = Task(login = userLogin, id = null, formData.title, formData.description, formData.dueDate, formData.supplement, status = false)
+[error]                                                      ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:1:1: type DeletedTask is not a member of package Models.Tasks
+[error] @(deletedTasks: Seq[Models.Tasks.DeletedTask])
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:1:34: type DeletedTask is not a member of package Models.Tasks
+[error] @(deletedTasks: Seq[Models.Tasks.DeletedTask])
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:92:9: type DeletedTask is not a member of package Models.Tasks
+[error] </html>
+[error]        ^
+[error] four errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 5 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:1:1: type DeletedTask is not a member of package Models.Tasks
+[error] @(deletedTasks: Seq[Models.Tasks.DeletedTask])
+[error] ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:1:34: type DeletedTask is not a member of package Models.Tasks
+[error] @(deletedTasks: Seq[Models.Tasks.DeletedTask])
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\views\tasks\deletedTasks.scala.html:92:9: type DeletedTask is not a member of package Models.Tasks
+[error] </html>
+[error]        ^
+[error] three errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 5 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 9 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Tasks\TaskForm.scala:17:12: missing argument list for method apply in object Task
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `apply _` or `apply(_,_,_,_,_,_,_)` instead of `apply`.
+[error]     )(Task.apply)(Task.unapply)
+[error]            ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TaskForm.scala:17:24: missing argument list for method unapply in object Task
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `unapply _` or `unapply(_)` instead of `unapply`.
+[error]     )(Task.apply)(Task.unapply)
+[error]                        ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TaskForm.scala:28:12: missing argument list for method apply in object Task
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `apply _` or `apply(_,_,_,_,_,_,_)` instead of `apply`.
+[error]     )(Task.apply)(Task.unapply)
+[error]            ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TaskForm.scala:28:24: missing argument list for method unapply in object Task
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `unapply _` or `unapply(_)` instead of `unapply`.
+[error]     )(Task.apply)(Task.unapply)
+[error]                        ^
+[error] four errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 6 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 9 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Tasks\TaskForm.scala:30:12: missing argument list for method apply in object Task
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `apply _` or `apply(_,_,_,_,_,_,_)` instead of `apply`.
+[error]     )(Task.apply)(Task.unapply)
+[error]            ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TaskForm.scala:30:24: missing argument list for method unapply in object Task
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `unapply _` or `unapply(_)` instead of `unapply`.
+[error]     )(Task.apply)(Task.unapply)
+[error]                        ^
+[error] two errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Tasks\TaskForm.scala:30:17: type mismatch;
+[error]  found   : (String, Int, String, String, java.time.LocalDate, Option[String], Boolean) => Models.Tasks.Task
+[error]  required: (String, Int, String, String, java.time.LocalDate, Option[String]) => ?
+[error]     )(Task.apply(_,_,_,_,_,_,_))(Task.unapply)
+[error]                 ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TaskForm.scala:30:39: missing argument list for method unapply in object Task
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `unapply _` or `unapply(_)` instead of `unapply`.
+[error]     )(Task.apply(_,_,_,_,_,_,_))(Task.unapply)
+[error]                                       ^
+[error] two errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Forcing garbage collection...
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:58:38: an expression of type Null is ineligible for implicit conversion
+[error] Error occurred in an application involving default arguments.
+[error]     val deletedTask = task.copy(id = null, status = true)
+[error]                                      ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:58:38: type mismatch;
+[error]  found   : None.type
+[error]  required: Int
+[error]     val deletedTask = task.copy(id = None, status = true)
+[error]                                      ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Tasks\Task.scala:19:92: type mismatch;
+[error]  found   : ((String, Option[Int], String, String, java.time.LocalDate, Option[String], Boolean)) => Models.Tasks.Task
+[error]  required: ((String, Int, String, String, java.time.LocalDate, Option[String], Boolean)) => ?
+[error]     override def * = (login, id, title, description, dueDate, supplement, status) <> (Task.tupled, Task.unapply)
+[error]                                                                                            ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\Task.scala:19:105: type mismatch;
+[error]  found   : Option[(String, Option[Int], String, String, java.time.LocalDate, Option[String], Boolean)]
+[error]  required: Option[(String, Int, String, String, java.time.LocalDate, Option[String], Boolean)]
+[error]     override def * = (login, id, title, description, dueDate, supplement, status) <> (Task.tupled, Task.unapply)
+[error]                                                                                                         ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:18:37: type mismatch;
+[error]  found   : Int(1)
+[error]  required: String
+[error]         listOfTasks.map(_.id).max + 1
+[error]                                     ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:20:19: type mismatch;
+[error]  found   : Int
+[error]  required: Option[Int]
+[error]       Task(login, nextTaskId, title, description, dueDate, supplement, status)
+[error]                   ^
+[error] four errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:18:37: type mismatch;
+[error]  found   : Int(1)
+[error]  required: String
+[error]         listOfTasks.map(_.id).max + 1
+[error]                                     ^
+[error] C:\Scala\To-Do List\app\Models\Tasks\TasksMethods.scala:20:19: type mismatch;
+[error]  found   : Int
+[error]  required: Option[Int]
+[error]       Task(login, nextTaskId, title, description, dueDate, supplement, status)
+[error]                   ^
+[error] two errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Forcing garbage collection...
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Canceling execution...
+[debug] Forcing garbage collection...
+[error] Cancelled: run
+[error] Cancelled: run
+[error] Use 'last' for the full log.
+[debug] > Exec(idea-shell, None, None)

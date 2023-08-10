@@ -1,0 +1,391 @@
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 8 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 26 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\PrivateMethods.scala:26:70: Cannot perform option-mapped operation
+[error]       with type: (String, Int) => R
+[error]   for base type: (String, String) => Boolean
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                                      ^
+[error] C:\Scala\To-Do List\app\Models\PrivateMethods.scala:26:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                            ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:29:35: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]       tasks <- TasksMethods.tasks(userId)
+[error]                                   ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:46:34: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.readOneTask(id, userId).map { task =>
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:83:33: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         TasksMethods.createTask(userId, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                                 ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:109:34: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.readOneTask(id, userId).map { task =>
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:134:32: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         val updatedTask = Task(userId, formData.id, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:135:44: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         TasksMethods.editTask(updatedTask, userId).map { _ =>
+[error]                                            ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:160:52: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     val deletedTask = TasksMethods.readOneTask(id, userId)
+[error]                                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:183:48: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]       deletedTask <- TasksMethods.deletedTasks(userId)
+[error]                                                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:199:36: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.clearTable(table, userId)
+[error]                                    ^
+[error] 11 errors found
+[debug] Forcing garbage collection...
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 8 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 26 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\PrivateMethods.scala:26:70: Cannot perform option-mapped operation
+[error]       with type: (String, Int) => R
+[error]   for base type: (String, String) => Boolean
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                                      ^
+[error] C:\Scala\To-Do List\app\Models\PrivateMethods.scala:26:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                            ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:29:35: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]       tasks <- TasksMethods.tasks(userId)
+[error]                                   ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:46:34: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.readOneTask(id, userId).map { task =>
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:83:33: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         TasksMethods.createTask(userId, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                                 ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:109:34: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.readOneTask(id, userId).map { task =>
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:134:32: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         val updatedTask = Task(userId, formData.id, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:135:44: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         TasksMethods.editTask(updatedTask, userId).map { _ =>
+[error]                                            ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:160:52: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     val deletedTask = TasksMethods.readOneTask(id, userId)
+[error]                                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:183:48: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]       deletedTask <- TasksMethods.deletedTasks(userId)
+[error]                                                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:199:36: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.clearTable(table, userId)
+[error]                                    ^
+[error] 11 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 9 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 13 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:29:35: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]       tasks <- TasksMethods.tasks(userId)
+[error]                                   ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:46:34: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.readOneTask(id, userId).map { task =>
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:83:33: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         TasksMethods.createTask(userId, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                                 ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:109:34: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.readOneTask(id, userId).map { task =>
+[error]                                  ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:134:32: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         val updatedTask = Task(userId, formData.id, formData.title, formData.description, formData.dueDate, formData.supplement)
+[error]                                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:135:44: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]         TasksMethods.editTask(updatedTask, userId).map { _ =>
+[error]                                            ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:160:52: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     val deletedTask = TasksMethods.readOneTask(id, userId)
+[error]                                                    ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:183:48: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]       deletedTask <- TasksMethods.deletedTasks(userId)
+[error]                                                ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:199:36: type mismatch;
+[error]  found   : Option[Int]
+[error]  required: String
+[error]     TasksMethods.clearTable(table, userId)
+[error]                                    ^
+[error] 9 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 10 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:31:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:54:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:98:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:120:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:150:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:176:23: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]   }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                       ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:193:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] 7 errors found
+[debug] Forcing garbage collection...
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 10 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:31:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:54:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:98:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:120:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:150:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:176:23: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]   }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                       ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:193:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] 7 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 10 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:54:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:98:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:120:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:150:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:176:23: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]   }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                       ^
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:193:25: type mismatch;
+[error]  found   : play.api.mvc.Result
+[error]  required: scala.concurrent.Future[play.api.mvc.Result]
+[error]     }.getOrElse(Redirect(routes.MainPageController.login()))
+[error]                         ^
+[error] 6 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 10 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\ToDoListController.scala:211:34: type mismatch;
+[error]  found   : scala.concurrent.Future[play.api.mvc.Result]
+[error]  required: play.api.mvc.Result
+[error]     }.getOrElse(Future.successful(Redirect(routes.MainPageController.login())))
+[error]                                  ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 10 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 13 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:129:1: Unmatched closing brace '}' ignored here
+[error] }
+[error] ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:129:1: Unmatched closing brace '}' ignored here
+[error] }
+[error] ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Forcing garbage collection...
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Forcing garbage collection...
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true

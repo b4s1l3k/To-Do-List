@@ -1,0 +1,278 @@
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 3 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:10:19: Cannot find an implicit ExecutionContext. You might add
+[error] an (implicit ec: ExecutionContext) parameter to your method.
+[error] 
+[error] The ExecutionContext is used to configure how and on which
+[error] thread pools asynchronous tasks (such as Futures) will run,
+[error] so the specific ExecutionContext that is selected is important.
+[error] 
+[error] If your application does not define an ExecutionContext elsewhere,
+[error] consider using Scala's global ExecutionContext by defining
+[error] the following:
+[error] 
+[error] implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
+[error]     users.flatMap { listOfUsers =>
+[error]                   ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:19:54: value result is not a member of slick.lifted.TableQuery[Models.Users.SlickTablesUser.UserTable]
+[error]     val queryDescription = SlickTablesUser.userTable.result
+[error]                                                      ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:28:54: value += is not a member of slick.lifted.TableQuery[Models.Users.SlickTablesUser.UserTable]
+[error] did you mean ++?
+[error]   Expression does not convert to assignment because receiver is not assignable.
+[error]     val queryDescription = SlickTablesUser.userTable += user
+[error]                                                      ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:38:70: value === is not a member of slick.lifted.Rep[Int]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                                      ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:38:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                            ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:55:69: value === is not a member of slick.lifted.Rep[String]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.login === login).exists.result
+[error]                                                                     ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:55:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.login === login).exists.result
+[error]                                                            ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:69:80: value === is not a member of slick.lifted.Rep[String]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                                                ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:69:107: value === is not a member of slick.lifted.Rep[Int]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                                                                           ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:69:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                            ^
+[error] 10 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 3 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:20:54: value result is not a member of slick.lifted.TableQuery[Models.Users.SlickTablesUser.UserTable]
+[error]     val queryDescription = SlickTablesUser.userTable.result
+[error]                                                      ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:29:54: value += is not a member of slick.lifted.TableQuery[Models.Users.SlickTablesUser.UserTable]
+[error] did you mean ++?
+[error]   Expression does not convert to assignment because receiver is not assignable.
+[error]     val queryDescription = SlickTablesUser.userTable += user
+[error]                                                      ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:39:70: value === is not a member of slick.lifted.Rep[Int]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                                      ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:39:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.userId === userId).delete
+[error]                                                            ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:56:69: value === is not a member of slick.lifted.Rep[String]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.login === login).exists.result
+[error]                                                                     ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:56:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(_.login === login).exists.result
+[error]                                                            ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:70:80: value === is not a member of slick.lifted.Rep[String]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                                                ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:70:107: value === is not a member of slick.lifted.Rep[Int]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                                                                           ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:70:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                            ^
+[error] 9 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 3 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Forcing garbage collection...
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 5 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 3 Scala sources and 1 Java source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 9 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 3 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Users\UserForm.scala:14:12: type mismatch;
+[error]  found   : (Int, String, String) => Models.Users.User
+[error]  required: (Int, String, Int) => ?
+[error]     )(User.apply)(User.unapply)
+[error]            ^
+[error] C:\Scala\To-Do List\app\Models\Users\UserForm.scala:14:24: missing argument list for method unapply in object User
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `unapply _` or `unapply(_)` instead of `unapply`.
+[error]     )(User.apply)(User.unapply)
+[error]                        ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:18:45: type mismatch;
+[error]  found   : Int
+[error]  required: String
+[error]       Future.successful(User(userId, login, password))
+[error]                                             ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:73:107: Cannot perform option-mapped operation
+[error]       with type: (String, Int) => R
+[error]   for base type: (String, String) => Boolean
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                                                                           ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:73:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                            ^
+[error] 5 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 3 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Users\UserForm.scala:14:12: type mismatch;
+[error]  found   : (Int, String, String) => Models.Users.User
+[error]  required: (Int, String, Int) => ?
+[error]     )(User.apply)(User.unapply)
+[error]            ^
+[error] C:\Scala\To-Do List\app\Models\Users\UserForm.scala:14:24: missing argument list for method unapply in object User
+[error] Unapplied methods are only converted to functions when a function type is expected.
+[error] You can make this conversion explicit by writing `unapply _` or `unapply(_)` instead of `unapply`.
+[error]     )(User.apply)(User.unapply)
+[error]                        ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:18:45: type mismatch;
+[error]  found   : Int
+[error]  required: String
+[error]       Future.successful(User(userId, login, password))
+[error]                                             ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:73:107: Cannot perform option-mapped operation
+[error]       with type: (String, Int) => R
+[error]   for base type: (String, String) => Boolean
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                                                                           ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:73:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                            ^
+[error] 5 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 3 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:18:45: type mismatch;
+[error]  found   : Int
+[error]  required: String
+[error]       Future.successful(User(userId, login, password))
+[error]                                             ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:73:107: Cannot perform option-mapped operation
+[error]       with type: (String, Int) => R
+[error]   for base type: (String, String) => Boolean
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                                                                           ^
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:73:60: ambiguous implicit values:
+[error]  both value BooleanColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Boolean]]
+[error]  and value BooleanOptionColumnCanBeQueryCondition in object CanBeQueryCondition of type slick.lifted.CanBeQueryCondition[slick.lifted.Rep[Option[Boolean]]]
+[error]  match expected type slick.lifted.CanBeQueryCondition[Nothing]
+[error]     val queryDescription = SlickTablesUser.userTable.filter(user => user.login === login && user.password === password).result.headOption
+[error]                                                            ^
+[error] three errors found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 3 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:24:52: type mismatch;
+[error]  found   : scala.concurrent.Future[Models.Users.User]
+[error]  required: Models.Users.User
+[error]     UsersMethods.insertUser(UsersMethods.createUser("bla", "bla"))
+[error]                                                    ^
+[error] one error found
+[debug] Forcing garbage collection...
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Forcing garbage collection...
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[info] done compiling
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Exporting web-assets:to-do-list
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\controllers\MainPageController.scala:26:35: value flatMap is not a member of Unit
+[error]       _ <- UsersMethods.insertUser(user)
+[error]                                   ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Scala\To-Do List\target\scala-2.13\classes ...
+[error] C:\Scala\To-Do List\app\Models\Users\UsersMethods.scala:34:63: type mismatch;
+[error]  found   : Unit
+[error]  required: scala.concurrent.Future[Unit]
+[error]     Connection.Connection.db.run(queryDescription).onComplete {
+[error]                                                               ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Canceling execution...
+[error] Cancelled: run
+[error] Cancelled: run
+[error] Use 'last' for the full log.
+[debug] > Exec(idea-shell, None, None)

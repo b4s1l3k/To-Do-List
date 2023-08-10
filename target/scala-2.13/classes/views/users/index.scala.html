@@ -1,0 +1,72 @@
+@(taskForm: Form[Models.Tasks.Task])(implicit messages: Messages, request: RequestHeader)
+
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Start Page</title>
+ <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .intro-text {
+            text-align: center;
+            margin: 10px 0;
+            color: #555;
+            font-size: 18px;
+
+        }
+        form {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="date"] {
+            width: 90%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            word-break: break-word;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h1>Добро пожаловать в To-Do List!</h1>
+<p class="intro-text">Здесь вы можете организовать свои задачи и контролировать свои дела.</p>
+@helper.form(action = helper.CSRF(routes.ToDoListController.save())) {
+
+@helper.inputText(taskForm("Задача"))
+
+@helper.inputText(taskForm("Описание"))
+
+@helper.inputDate(taskForm("Дедлайн"))
+
+@helper.inputText(taskForm("Дополнение"))
+
+<input type="submit" value="Сохранить задачу">
+}
+</body>
+</html>
