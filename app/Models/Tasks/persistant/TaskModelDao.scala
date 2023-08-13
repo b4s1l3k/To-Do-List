@@ -105,14 +105,11 @@ class TaskModelDaoImpl @Inject() extends TaskModelDao {
    * @param login Логин пользователя.
    * @return Действие для удаления задач.
    */
-  override  def deleteTasks(tasks: Seq[Task], login: String): DBIOAction[Unit, NoStream, Effect.Write] = {
-
-    val updatedTasks = tasks.filter(_.status == false).map(_.copy(id = None, status = true))
+  override  def deleteTasks(tasks: Seq[Task], login: String): DBIOAction[Unit, NoStream, Effect.Write] =
     DBIO.seq(
-      taskTable ++= updatedTasks,
+      taskTable ++= tasks,
       taskTable.filter(task => task.login === login.bind && task.status === false).delete
     )
-  }
 
   /**
    * Метод удаляет завершенные задачи пользователя из базы данных.
