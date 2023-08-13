@@ -1,8 +1,8 @@
-package Models.Tasks
+package Models.Tasks.persistant
 
 import java.time.LocalDate
 
-case class Task(login: String,
+final case class Task(login: String,
                 id: Option[Int],
                 title: String,
                 description: String,

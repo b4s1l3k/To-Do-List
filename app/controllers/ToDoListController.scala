@@ -3,17 +3,105 @@ package controllers
 import javax.inject._
 import play.api.mvc._
 import play.api.i18n.Messages
-import Models.Tasks._
 import Models.Tasks.TaskForm._
-import Models.Tasks.Task
+import Models.Tasks.persistant._
 import Models.PrivateExecutionContext._
+import Models.Tasks.service.TaskServiceImpl
+import play.api.data.Form
 
 import java.time.LocalDate
 import scala.concurrent.Future
 
 @Singleton
-class ToDoListController @Inject()(cc: ControllerComponents)
+class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskService: TaskServiceImpl, cc: ControllerComponents)
   extends AbstractController(cc) {
+
+  /**
+   * Объект для хранения констант с названиями форм.
+   */
+  private object FormNames {
+    val EditeTask = "editeTask"
+    val CreateTask = "createTask"
+  }
+
+  private object TasksForm {
+    import FormNames._
+
+    /**
+     * Генерирует ответ NotFound с сообщением о том, что задача с указанным идентификатором не найдена.
+     *
+     * @return Результат Future[Result], содержащий NotFound с сообщением.
+     */
+    def NoSuchElementExceptionError(implicit messages: Messages): Future[Result] =
+      Future.successful {
+        NotFound(views.html.tasks.notFound("Задача с указанным идентификатором не найдена"))
+      }
+
+    /**
+     * Генерирует ответ BadRequest с сообщением о непредвиденной ошибке формы.
+     *
+     * @return Результат BadRequest с сообщением об ошибке.
+     */
+    def FormWithUnexpectedError(implicit request: Request[AnyContent], messages: Messages): Result =
+      BadRequest(views.html.tasks.createTask(taskForm.withGlobalError("Непредвиденная ошибка")))
+
+    /**
+     * Генерирует ответ BadRequest с формой, содержащей ошибки валидации.
+     *
+     * @param formWithErrors Форма с ошибками валидации.
+     * @return Результат BadRequest с формой, содержащей ошибки.
+     */
+    def SaveFormWithErrors(formWithErrors: Form[Task])(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
+      Future.successful {
+        BadRequest(views.html.tasks.createTask(formWithErrors))
+      }
+
+    /**
+     * Генерирует ответ BadRequest с формой редактирования задачи, содержащей ошибки валидации.
+     *
+     * @param formWithErrors Форма с ошибками валидации.
+     * @return Результат BadRequest с формой редактирования задачи, содержащей ошибки.
+     */
+    def UpdateFormWithErrors(formWithErrors: Form[Task])(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
+      Future.successful {
+        BadRequest(views.html.tasks.editTask(formWithErrors))
+      }
+
+    /**
+     * Генерирует ответ BadRequest с формой, содержащей ошибку указания дедлайна ранее текущей даты.
+     *
+     * @param formName Название формы, указывающее, какую форму следует отобразить (CreateTask или EditTask).
+     * @param formData Данные задачи для заполнения формы.
+     * @return Результат BadRequest с формой, содержащей ошибку указания дедлайна ранее текущей даты.
+     */
+    def FormWithWrongDate(formName: String)(formData: Task)(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
+      Future.successful {
+        formName match {
+          case CreateTask =>
+            BadRequest(views.html.tasks.createTask(taskForm
+              .fill(Task(formData.login,
+                formData.id,
+                formData.title,
+                formData.description,
+                formData.dueDate,
+                formData.supplement,
+                formData.status))
+              .withError("Дедлайн", "Дедлайн раньше текущей даты"))
+            )
+          case EditeTask =>
+            BadRequest(views.html.tasks.editTask(editForm
+              .fill(Task(formData.login,
+                formData.id,
+                formData.title,
+                formData.description,
+                formData.dueDate,
+                formData.supplement,
+                formData.status))
+              .withError("Дедлайн", "Дедлайн раньше текущей даты"))
+            )
+        }
+      }
+  }
 
   /**
    * Обертка для выполнения действий с идентификатором пользователя из сессии.
@@ -38,7 +126,7 @@ class ToDoListController @Inject()(cc: ControllerComponents)
   def get_all: Action[AnyContent] = Action.async { implicit request =>
     withUserLogin { userLogin =>
       for {
-        tasks <- TasksMethods.tasks(userLogin)
+        tasks <- taskRepository.getTasks(userLogin)
       } yield Ok(views.html.tasks.listOfTasks(tasks))
     }
   }
@@ -53,13 +141,13 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    */
   def get_task(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
-
+    import TasksForm._
     withUserLogin { userLogin =>
-      TasksMethods.readOneTask(id, userLogin).map { task =>
+      taskRepository.getOneTask(id, userLogin).map { task =>
         Ok(views.html.tasks.taskDetails(task))
-      }.recover {
+      }.recoverWith {
         case _: NoSuchElementException =>
-          NotFound(views.html.tasks.notFound("Задача с указанным идентификатором не найдена"))
+          NoSuchElementExceptionError
       }
     }
   }
@@ -83,28 +171,29 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    */
   def save: Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
+    import TasksForm._
+    import FormNames._
 
     withUserLogin { userLogin =>
       taskForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(views.html.tasks.createTask(formWithErrors))),
+        formWithErrors => SaveFormWithErrors(formWithErrors),
         formData => {
           if (formData.dueDate.isBefore(LocalDate.now())) {
-            lazy val formWithWrongDate = taskForm.withError("Дедлайн", "Дедлайн раньше текущей даты")
-            Future.successful(BadRequest(views.html.tasks.createTask(formWithWrongDate)))
-          } else {TasksMethods.createTask(userLogin,
-              formData.title,
-              formData.description,
-              formData.dueDate,
-              formData.supplement,
-              status = false)
-            .map { task =>
-              TasksMethods.insertTask(task)
-              Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
-            }.recover {
-              case _: Throwable =>
-                lazy val errorForm = taskForm.withGlobalError("Непредвиденная ошибка")
-                BadRequest(views.html.tasks.createTask(errorForm))
-            }
+            FormWithWrongDate(CreateTask)(formData)
+          } else {
+            taskService.createTask(userLogin,
+                formData.title,
+                formData.description,
+                formData.dueDate,
+                formData.supplement,
+                status = false)
+              .map { task =>
+                taskRepository.insertTask(task)
+                Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
+              }.recover {
+                case _: Throwable =>
+                  FormWithUnexpectedError
+              }
           }
         }
       )
@@ -121,13 +210,14 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    */
   def edit(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
+    import TasksForm._
 
     withUserLogin { userLogin =>
-      TasksMethods.readOneTask(id, userLogin).map { task =>
+      taskRepository.getOneTask(id, userLogin).map { task =>
         Ok(views.html.tasks.editTask(editForm.fill(task)))
       }.recoverWith {
         case _: NoSuchElementException =>
-          Future.successful(NotFound(views.html.tasks.notFound("Задача с указанным идентификатором не найдена")))
+          NoSuchElementExceptionError
       }
     }
   }
@@ -140,20 +230,26 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    */
   def update: Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
+    import TasksForm._
+    import FormNames._
 
     withUserLogin { userLogin =>
       editForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(views.html.tasks.editTask(formWithErrors))),
+        formWithErrors => UpdateFormWithErrors(formWithErrors),
         formData => {
-          val updatedTask = Task(login = userLogin,
-            formData.id,
-            formData.title,
-            formData.description,
-            formData.dueDate,
-            formData.supplement,
-            status = false)
-          TasksMethods.editTask(updatedTask, userLogin).map { _ =>
-            Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
+          if (formData.dueDate.isBefore(LocalDate.now())) {
+            FormWithWrongDate(EditeTask)(formData)
+          } else {
+            val updatedTask = Task(login = userLogin,
+              formData.id,
+              formData.title,
+              formData.description,
+              formData.dueDate,
+              formData.supplement,
+              status = false)
+            taskService.updateTask(updatedTask, userLogin).map { _ =>
+              Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
+            }
           }
         }
       )
@@ -169,16 +265,17 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    */
   def delete_one(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
+    import TasksForm._
 
     withUserLogin { userLogin =>
       for {
-        doneTask <- TasksMethods.readOneTask(id, userLogin)
-        _ <- Future(TasksMethods.deleteTask(doneTask))
-        remainingTasks <- TasksMethods.tasks(userLogin)
+        doneTask <- taskRepository.getOneTask(id, userLogin)
+        _ <- Future(taskRepository.deleteTask(doneTask))
+        remainingTasks <- taskRepository.getTasks(userLogin)
       } yield Ok(views.html.tasks.deleteResult(doneTask, remainingTasks))
-    }.recover {
+    }.recoverWith {
       case _: NoSuchElementException =>
-        NotFound(views.html.tasks.notFound("Задача с указанным идентификатором не найдена"))
+        NoSuchElementExceptionError
     }.recover {
       case ex =>
         InternalServerError(s"Произошла ошибка: ${ex.getMessage}")
@@ -194,7 +291,7 @@ class ToDoListController @Inject()(cc: ControllerComponents)
   def deleted: Action[AnyContent] = Action.async { implicit request =>
     withUserLogin { userLogin =>
       for {
-        doneTask <- TasksMethods.doneTasks(userLogin)
+        doneTask <- taskRepository.getDoneTasks(userLogin)
       } yield Ok(views.html.tasks.doneTasks(doneTask))
     }
   }
@@ -203,12 +300,12 @@ class ToDoListController @Inject()(cc: ControllerComponents)
    * Действие для очистки указанной таблицы в базе данных.
    * GET /clear/:tableName
    *
-   * @param table Имя таблицы, которую необходимо очистить.
+   * @param tableName Имя таблицы, которую необходимо очистить.
    * @return HTTP-ответ с редиректом на страницу со списком всех задач.
    */
-  def clear(table: String): Action[AnyContent] = Action.async { implicit request =>
+  def clear(tableName: String): Action[AnyContent] = Action.async { implicit request =>
     withUserLogin { userLogin =>
-      TasksMethods.clearTable(table, userLogin).map { _ =>
+      taskRepository.deleteTasks(tableName, userLogin).map { _ =>
         Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
       }
     }

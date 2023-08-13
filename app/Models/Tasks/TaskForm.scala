@@ -2,7 +2,7 @@ package Models.Tasks
 
 import play.api.data.Form
 import play.api.data.Forms._
-import Models.Tasks._
+import Models.Tasks.persistant._
 
 object TaskForm {
 

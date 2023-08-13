@@ -2,30 +2,64 @@ package controllers
 
 import play.api.i18n.Messages
 import play.api.mvc._
+import play.api.data.Form
 
-import javax.inject._
 import Models.Tasks._
-import Models.Users._
+import Models.Users.persistant.{User, UserRepositoryImpl}
+import Models.Users.service.UsersServiceImpl
 import Models.Users.UserForm._
 import Models.PrivateExecutionContext._
-import Models.Users.UsersMethods
-import org.mindrot.jbcrypt.BCrypt
 
 import scala.concurrent.Future
+import javax.inject._
 
 @Singleton
-class MainPageController @Inject()(cc: ControllerComponents)
+class MainPageController @Inject()(userRepository: UserRepositoryImpl,
+                                   usersService: UsersServiceImpl,
+                                   cc: ControllerComponents)
   extends AbstractController(cc) {
 
-  /**
-   * Метод для хеширования пароля пользователя.
-   *
-   * @param password Пароль пользователя для хеширования.
-   * @return Захешированный пароль.
-   */
-  private def hashingPassword(password: String): String = {
-    lazy val logRounds = 10
-    BCrypt.hashpw(password, BCrypt.gensalt(logRounds))
+  private object LoginUserForm {
+
+    /**
+     * Генерирует ответ BadRequest с формой, содержащей ошибки валидации.
+     *
+     * @param formWithErrors Форма с ошибками валидации.
+     * @return Результат BadRequest с формой, содержащей ошибки.
+     */
+    def FormWithError(formWithErrors: Form[User])(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
+      Future.successful {
+        BadRequest(views.html.users.registerUser(formWithErrors))
+      }
+
+    /**
+     * Генерирует ответ BadRequest с формой, содержащей ошибку дублирования логина.
+     *
+     * @return Результат BadRequest с формой, содержащей ошибку дублирования логина.
+     */
+    def FormWithDuplicateLoginError(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
+      Future.successful {
+        BadRequest(views.html.users.registerUser(userForm.withError("Логин", "Этот логин уже занят")))
+      }
+
+    /**
+     * Генерирует ответ BadRequest с формой, содержащей глобальную ошибку.
+     *
+     * @return Результат BadRequest с формой, содержащей глобальную ошибку.
+     */
+    def FormWithUnexpectedError(implicit request: Request[AnyContent], messages: Messages): Result =
+      BadRequest(views.html.users.registerUser(userForm.withGlobalError("Непредвиденная ошибка")))
+
+    /**
+     * Генерирует ответ BadRequest с формой, содержащей ошибку неверного пароля.
+     *
+     * @param userData Пользовательские данные для заполнения формы.
+     * @return Результат BadRequest с формой, содержащей ошибку неверного пароля.
+     */
+    def FormWithInvalidPassword(userData: User)(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
+      Future.successful {
+        BadRequest(views.html.users.loginUser(userForm.fill(userData).withError("Пароль", "Неверный пароль")))
+      }
   }
 
   /**
@@ -52,26 +86,24 @@ class MainPageController @Inject()(cc: ControllerComponents)
    */
   def saveUser: Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
+    import LoginUserForm._
 
     userForm.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(views.html.users.registerUser(formWithErrors))),
+      formWithErrors => FormWithError(formWithErrors),
       userData => {
-        UsersMethods.checkUserByLogin(userData.login).flatMap { userExists =>
+        userRepository.checkUserByLogin(userData.login).flatMap { userExists =>
           if (userExists) {
             // Если пользователь с таким логином уже существует, добавляем ошибку к форме userForm
-            val formWithDuplicateLoginError = userForm.withError("Логин", "Этот логин уже занят")
-            Future.successful(BadRequest(views.html.users.registerUser(formWithDuplicateLoginError)))
+            FormWithDuplicateLoginError
           } else {
             // Регистрируем пользователя и перенаправляем на страницу входа
-            val hashedPassword = hashingPassword(userData.password)
-            Future.successful(User(userData.login, hashedPassword))
+            usersService.createUser(userData.login, usersService.hashingPassword(userData.password))
               .map { user =>
-                UsersMethods.insertUser(user)
+                userRepository.insertUser(user)
                 Redirect(routes.MainPageController.firstTask).withSession("userLogin" -> userData.login)
               }.recover {
                 case _: Throwable =>
-                  val errorForm = userForm.withGlobalError("Непредвиденная ошибка")
-                  BadRequest(views.html.users.registerUser(errorForm))
+                  FormWithUnexpectedError
               }
           }
         }
@@ -102,21 +134,19 @@ class MainPageController @Inject()(cc: ControllerComponents)
    */
   def login: Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
+    import LoginUserForm._
 
     userForm.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(views.html.users.loginUser(formWithErrors))),
+      formWithErrors => FormWithError(formWithErrors),
       userData => {
-        UsersMethods.checkUserPassword(userData.login, userData.password).flatMap { correctPassword =>
+        usersService.checkUserPassword(userData.login, userData.password).flatMap { correctPassword =>
           if (correctPassword) {
             // Пароль верный, перенаправляем на главную страницу
             Future.successful(Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userData.login))
 
           } else {
             // Пароль неверный, добавляем ошибку к форме userForm
-            val formWithWrongPasswordError = userForm
-              .fill(userData)
-              .withError("Пароль", "Неверный пароль")
-            Future.successful(BadRequest(views.html.users.loginUser(formWithWrongPasswordError)))
+            FormWithInvalidPassword(userData)
           }
         }
       }

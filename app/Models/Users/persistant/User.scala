@@ -1,12 +1,13 @@
-package Models.Users
+package Models.Users.persistant
 
-case class User(login: String, password: String)
+final case class User(login: String, password: String)
 
 object SlickTablesUser {
 
   import slick.jdbc.PostgresProfile.api._
 
   class TableUser(tag: Tag) extends Table[User](tag, Some("tasks"), "Users") {
+
     def login = column[String]("Логин", O.PrimaryKey)
 
     def password = column[String]("Пароль")

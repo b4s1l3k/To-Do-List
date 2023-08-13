@@ -1,12 +1,13 @@
 package Models
 
 import Models.Connection.Connection
-import Models.Users.SlickTablesUser._
-import Models.Tasks.SlickTablesTask._
+import Models.Users.persistant.SlickTablesUser._
+import Models.Tasks.persistant.SlickTablesTask._
+import Models.PrivateExecutionContext._
 
 import scala.util.{Failure, Success}
 import slick.jdbc.PostgresProfile.api._
-import Models.PrivateExecutionContext._
+
 
 object PrivateMethods extends App {
 
