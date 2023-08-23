@@ -2,31 +2,37 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Task Details</title>
-  <style>
+    <head>
+        <title>Task Details</title>
+        <style>
         body {
             font-family: Arial, sans-serif;
         }
+
         h1 {
             color: #007bff;
         }
+
         .task-details {
             border: 1px solid #dddddd;
             border-radius: 5px;
             padding: 20px;
             background-color: #f9f9f9;
         }
+
         .field-label {
             font-weight: bold;
         }
+
         .field-value {
             margin-bottom: 12px;
             word-break: break-word;
         }
+
         .back-button {
             margin-top: 12px;
         }
+
         .back-button a {
             background-color: #007bff;
             color: #fff;
@@ -35,23 +41,23 @@
             border-radius: 4px;
         }
     </style>
-</head>
-<body>
-<h1>Детали задачи</h1>
-<div class="task-details">
-  <div class="field-label">ID:</div>
-  <div class="field-value">@task.id</div>
-  <div class="field-label">Заголовок:</div>
-  <div class="field-value">@task.title</div>
-  <div class="field-label">Описание:</div>
-  <div class="field-value">@task.description</div>
-  <div class="field-label">Дедлайн:</div>
-  <div class="field-value">@task.dueDate</div>
-  <div class="field-label">Дополнение:</div>
-  <div class="field-value">@task.supplement.getOrElse("")</div>
-</div>
-<div class="back-button">
-  <a href="@routes.ToDoListController.get_all">Вернуться ко всем задачам</a>
-</div>
-</body>
+    </head>
+    <body>
+        <h1>Детали задачи</h1>
+        <div class="task-details">
+            <div class="field-label">ID:</div>
+            <div class="field-value">@task.id</div>
+            <div class="field-label">Заголовок:</div>
+            <div class="field-value">@task.title</div>
+            <div class="field-label">Описание:</div>
+            <div class="field-value">@task.description</div>
+            <div class="field-label">Дедлайн:</div>
+            <div class="field-value">@task.dueDate</div>
+            <div class="field-label">Дополнение:</div>
+            <div class="field-value">@task.supplement.getOrElse("")</div>
+        </div>
+        <div class="back-button">
+            <a href="@routes.ToDoListController.get_all">Вернуться ко всем задачам</a>
+        </div>
+    </body>
 </html>

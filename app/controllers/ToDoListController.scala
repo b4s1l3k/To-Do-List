@@ -20,7 +20,7 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
    * Объект для хранения констант с названиями форм.
    */
   private object FormNames {
-    val EditeTask = "editeTask"
+    val EditTask = "editTask"
     val CreateTask = "createTask"
   }
 
@@ -79,24 +79,12 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
         formName match {
           case CreateTask =>
             BadRequest(views.html.tasks.createTask(taskForm
-              .fill(Task(formData.login,
-                formData.id,
-                formData.title,
-                formData.description,
-                formData.dueDate,
-                formData.supplement,
-                formData.status))
+              .fill(formData)
               .withError("Дедлайн", "Дедлайн раньше текущей даты"))
             )
-          case EditeTask =>
+          case EditTask =>
             BadRequest(views.html.tasks.editTask(editForm
-              .fill(Task(formData.login,
-                formData.id,
-                formData.title,
-                formData.description,
-                formData.dueDate,
-                formData.supplement,
-                formData.status))
+              .fill(formData)
               .withError("Дедлайн", "Дедлайн раньше текущей даты"))
             )
         }
@@ -139,7 +127,7 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
    * @return HTTP-ответ с HTML-страницей, содержащей информацию о задаче.
    *         Если задача с указанным идентификатором не найдена, возвращает страницу с сообщением о не найденной задаче.
    */
-  def get_task(id: Int): Action[AnyContent] = Action.async { implicit request =>
+  def getTask(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
     import TasksForm._
     withUserLogin { userLogin =>
@@ -238,7 +226,7 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
         formWithErrors => UpdateFormWithErrors(formWithErrors),
         formData => {
           if (formData.dueDate.isBefore(LocalDate.now())) {
-            FormWithWrongDate(EditeTask)(formData)
+            FormWithWrongDate(EditTask)(formData)
           } else {
             val updatedTask = Task(login = userLogin,
               formData.id,
@@ -263,7 +251,7 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
    * @param id Идентификатор задачи для удаления.
    * @return HTTP-ответ с результатом удаления задачи.
    */
-  def delete_one(id: Int): Action[AnyContent] = Action.async { implicit request =>
+  def deleteOneTask(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
     import TasksForm._
 
@@ -288,7 +276,7 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
    *
    * @return HTTP-ответ с HTML-страницей, содержащей список удаленных задач.
    */
-  def deleted: Action[AnyContent] = Action.async { implicit request =>
+  def doneTasks: Action[AnyContent] = Action.async { implicit request =>
     withUserLogin { userLogin =>
       for {
         doneTask <- taskRepository.getDoneTasks(userLogin)

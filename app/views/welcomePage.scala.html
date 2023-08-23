@@ -14,6 +14,7 @@
                     height: 100vh;
                     margin: 0;
                 }
+
                 .container {
                     width: 80%;
                     max-width: 600px;
@@ -23,20 +24,24 @@
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                     text-align: center;
                 }
+
                 h1 {
                     color: #007bff;
                     margin-bottom: 20px;
                 }
+
                 .description {
                     margin-bottom: 20px;
                     color: #555;
                     font-size: 18px;
                 }
+
                 .buttons {
                     display: flex;
                     justify-content: center;
                     gap: 20px;
                 }
+
                 .button {
                     padding: 10px 20px;
                     font-size: 16px;
@@ -45,17 +50,21 @@
                     cursor: pointer;
                     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
                 }
+
                 .button.login {
                     background-color: #007bff;
                     color: #fff;
                 }
+
                 .button.login:hover {
                     background-color: #0056b3;
                 }
+
                 .button.register {
                     background-color: #00cc00;
                     color: #fff;
                 }
+
                 .button.register:hover {
                     background-color: #009900;
                 }
@@ -64,7 +73,8 @@
     <body>
         <div class="container">
             <h1>Добро пожаловать в To-Do List!</h1>
-            <p class="description">Вы попали на стартовую страницу приложения. Здесь вы можете начать использование сервиса, выбрав одну из опций:</p>
+            <p class="description">
+                Вы попали на стартовую страницу приложения. Здесь вы можете начать использование сервиса, выбрав одну из опций:</p>
             <div class="buttons">
                 <form action="@routes.MainPageController.showLoginForm" method="get">
                     <button class="button login" type="submit">Вход</button>

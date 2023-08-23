@@ -2,15 +2,17 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Create Task</title>
-    <style>
+    <head>
+        <title>Create Task</title>
+        <style>
         body {
             font-family: Arial, sans-serif;
         }
+
         h1 {
             color: #007bff;
         }
+
         form {
             width: 300px;
             margin: 0 auto;
@@ -19,11 +21,13 @@
             border-radius: 5px;
             background-color: #f9f9f9;
         }
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
         }
+
         input[type="text"], input[type="date"] {
             width: 100%;
             padding: 8px;
@@ -34,6 +38,7 @@
             width: 150px
             word-break: break-word;
         }
+
         input[type="submit"] {
             background-color: #007bff;
             color: #fff;
@@ -43,25 +48,21 @@
             cursor: pointer;
         }
     </style>
-</head>
-<body>
-<h1>Создание задачи</h1>
-@helper.form(action = helper.CSRF(routes.ToDoListController.save)) {
+    </head>
+    <body>
+        <h1>Создание задачи</h1>
+        @helper.form(action = helper.CSRF(routes.ToDoListController.save)) {
 
 
+            @helper.inputText(taskForm("Задача"))
 
-@helper.inputText(taskForm("Задача"))
+            @helper.inputText(taskForm("Описание"))
 
+            @helper.inputDate(taskForm("Дедлайн"))
 
-@helper.inputText(taskForm("Описание"))
+            @helper.inputText(taskForm("Дополнение"))
 
-
-@helper.inputDate(taskForm("Дедлайн"))
-
-
-@helper.inputText(taskForm("Дополнение"))
-
-<input type="submit" value="Сохранить задачу">
-}
-</body>
+            <input type="submit" value="Сохранить задачу">
+            }
+    </body>
 </html>

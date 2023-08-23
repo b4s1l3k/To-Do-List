@@ -2,91 +2,101 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Done Tasks</title>
-  <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            color: #007bff;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-            width: 150px;
-            word-break: break-word;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .back-button {
-            margin-top: 12px;
-        }
-        .back-button a, .clear-button input[type="submit"] {
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .back-button a:hover, .clear-button input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        .button-container {
-            margin-top: 12px;
-            display: flex;
-            gap: 10px;
-        }
-        .clear-button input[type="submit"] {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .clear-button input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-<h1>Решенные задачи</h1>
-<table>
-  <tr>
-    <th>Заголовок</th>
-    <th>Описание</th>
-    <th>Дедлайн</th>
-    <th>Дополнение</th>
-  </tr>
-  @for(task <- doneTasks) {
-  <tr>
+    <head>
+        <title>Done Tasks</title>
+        <style>
+                body {
+                    font-family: Arial, sans-serif;
+                }
 
-    <td>@task.title</td>
-    <td>@task.description</td>
-    <td>@task.dueDate</td>
-    <td>@task.supplement.getOrElse("")</td>
-  </tr>
-  }
-</table>
-<div class="button-container">
-  <div class="clear-button">
-    <form action="@routes.ToDoListController.clear("clearDoneTasks")" method="GET">
-    <input type="submit" value="Очистить список задач">
-    </form>
-  </div>
-  <div class="back-button">
-    <a href="@routes.ToDoListController.get_all">Вернуться ко всем задачам</a>
-  </div>
-</div>
-</body>
+                h1 {
+                    color: #007bff;
+                }
+
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                th, td {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;
+                    width: 150px;
+                    word-break: break-word;
+                }
+
+                tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }
+
+                .back-button {
+                    margin-top: 12px;
+                }
+
+                .back-button a, .clear-button input[type="submit"] {
+                    background-color: #007bff;
+                    color: #fff;
+                    text-decoration: none;
+                    padding: 10px 16px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                }
+
+                .back-button a:hover, .clear-button input[type="submit"]:hover {
+                    background-color: #0056b3;
+                }
+
+                .button-container {
+                    margin-top: 12px;
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .clear-button input[type="submit"] {
+                    background-color: #007bff;
+                    color: #fff;
+                    border: none;
+                    padding: 10px 16px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                }
+
+                .clear-button input[type="submit"]:hover {
+                    background-color: #0056b3;
+                }
+        </style>
+    </head>
+    <body>
+        <h1>Решенные задачи</h1>
+        <table>
+            <tr>
+                <th>Заголовок</th>
+                <th>Описание</th>
+                <th>Дедлайн</th>
+                <th>Дополнение</th>
+            </tr>
+            @for(task <- doneTasks) {
+                <tr>
+
+                    <td>@task.title</td>
+                    <td>@task.description</td>
+                    <td>@task.dueDate</td>
+                    <td>@task.supplement.getOrElse("")</td>
+                </tr>
+            }
+            </table>
+        <div class="button-container">
+            <div class="clear-button">
+                <form action="@routes.ToDoListController.clear("clearDoneTasks")" method="GET">
+                    <input type="submit" value="Очистить список задач">
+                </form>
+            </div>
+            <div class="back-button">
+                <a href="@routes.ToDoListController.get_all">Вернуться ко всем задачам</a>
+            </div>
+        </div>
+    </body>
 </html>

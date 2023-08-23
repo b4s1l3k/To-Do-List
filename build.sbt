@@ -1,8 +1,8 @@
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .settings(
-    name := """To-Do List""",
-    version := "1.0-SNAPSHOT",
+    name := """To-Do-List""",
+    version := "1.0",
     scalaVersion := "2.13.11",
     libraryDependencies ++= Seq(
       guice,
@@ -18,5 +18,8 @@ lazy val root = (project in file("."))
       "-feature",
       "-deprecation",
       "-Xfatal-warnings"
+    ),
+    Universal / javaOptions ++= Seq(
+      "-Dpidfile.path=/dev/null"
     )
   )
