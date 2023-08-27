@@ -14,11 +14,11 @@ trait TaskModelDao {
 
   def insertTask(task: Task): FixedSqlAction[Int, NoStream, Effect.Write]
 
-  def deleteTask(task: Task): FixedSqlAction[Int, NoStream, Effect.Write]
+  def deleteTask(id: Int, login: String): FixedSqlAction[Int, NoStream, Effect.Write]
 
   def getOneTask(id: Int, login: String): SqlAction[Option[Task], NoStream, Effect.Read]
 
-  def updateTask(task: Task, login: String): FixedSqlAction[Int, NoStream, Effect.Write]
+  def updateTask(task: Task): FixedSqlAction[Int, NoStream, Effect.Write]
 
   def deleteTasks(tasks: Seq[Task], login: String): DBIOAction[Unit, NoStream, Effect.Write]
 
@@ -63,15 +63,15 @@ class TaskModelDaoImpl @Inject() extends TaskModelDao {
   /**
    * Метод удаляет задачу из базы данных.
    *
-   * @param task Задача для удаления.
+   * @param id    Id задачи для удаления.
+   * @param login Login пользователя.
    * @return Запрос к базе данных для удаления задачи.
    */
-  override def deleteTask(task: Task): FixedSqlAction[Int, NoStream, Effect.Write] =
+  override def deleteTask(id: Int, login: String): FixedSqlAction[Int, NoStream, Effect.Write] =
     taskTable
-      .filter(t => t.login === task.login && t.id === task.id && t.status === false)
-      .update {
-        task.copy(id = None, status = true)
-      }
+      .filter(t => t.login === login && t.id === id && t.status === false)
+      .map(t => (t.id, t.status))
+      .update((None, true))
 
   /**
    * Метод получает одну задачу по указанному идентификатору и логину пользователя.
@@ -89,13 +89,12 @@ class TaskModelDaoImpl @Inject() extends TaskModelDao {
   /**
    * Метод обновляет существующую задачу в базе данных.
    *
-   * @param task  Задача для обновления.
-   * @param login Логин пользователя.
+   * @param task Задача для обновления.
    * @return Запрос к базе данных для обновления задачи.
    */
-  override def updateTask(task: Task, login: String): FixedSqlAction[Int, NoStream, Effect.Write] =
+  override def updateTask(task: Task): FixedSqlAction[Int, NoStream, Effect.Write] =
     taskTable
-      .filter(t => t.login === login && t.id === task.id)
+      .filter(t => t.id === task.id && t.login === task.login)
       .update(task)
 
   /**
@@ -105,10 +104,10 @@ class TaskModelDaoImpl @Inject() extends TaskModelDao {
    * @param login Логин пользователя.
    * @return Действие для удаления задач.
    */
-  override  def deleteTasks(tasks: Seq[Task], login: String): DBIOAction[Unit, NoStream, Effect.Write] =
+  override def deleteTasks(tasks: Seq[Task], login: String): DBIOAction[Unit, NoStream, Effect.Write] =
     DBIO.seq(
       taskTable ++= tasks,
-      taskTable.filter(task => task.login === login.bind && task.status === false).delete
+      taskTable.filter(task => task.login === login && task.status === false).delete
     )
 
   /**
@@ -118,8 +117,8 @@ class TaskModelDaoImpl @Inject() extends TaskModelDao {
    * @return Запрос к базе данных для удаления завершенных задач.
    */
   override def deleteDoneTasks(login: String): FixedSqlAction[Int, NoStream, Effect.Write] =
-  taskTable
-    .filter(task => task.login === login && task.status === true)
-    .delete
+    taskTable
+      .filter(task => task.login === login && task.status === true)
+      .delete
 
 }

@@ -5,7 +5,6 @@ import Models.Connection.Connection
 import javax.inject.Inject
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
-
 import Models.PrivateExecutionContext._
 
 trait TaskRepository {
@@ -14,15 +13,15 @@ trait TaskRepository {
 
   def getDoneTasks(login: String): Future[Seq[Task]]
 
-  def insertTask(task: Task): Unit
+  def insertTask(task: Task): Future[Unit]
 
-  def deleteTask(task: Task): Unit
+  def deleteTask(id: Int, login: String): Future[Any]
 
   def getOneTask(id: Int, login: String): Future[Task]
 
   def deleteTasks(tableName: String, login: String): Future[Unit]
 
-  def updateTask(task: Task, login: String): Unit
+  def updateTask(task: Task): Unit
 
 }
 
@@ -48,8 +47,8 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
    */
   override def getDoneTasks(login: String): Future[Seq[Task]] =
     Connection.db.run(taskModelDao.getDoneTasks(login)).andThen {
-      case Success(tasks) => println(s"The following tasks were retrieved from the database: $tasks.")
-      case Failure(ex) => println(ex)
+      case Success(tasks) => println(s"The following done tasks were retrieved from the database: $tasks.")
+      case Failure(ex) => println(ex.getMessage)
     }
 
   /**
@@ -57,21 +56,30 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
    *
    * @param task Задача для вставки.
    */
-  override def insertTask(task: Task): Unit =
-    Connection.db.run(taskModelDao.insertTask(task)).onComplete {
-      case Success(_) => println(s"A new task has been added! Title: ${task.title}")
-      case Failure(ex) => println(s"Failed to add a task: ${ex.getMessage}")
+  override def insertTask(task: Task): Future[Unit] =
+    Connection.db.run(taskModelDao.insertTask(task)).map { _ =>
+      println(s"A new task has been added! Title: ${task.title}")
+    }.recover {
+      case ex => println(s"Failed to add a task: ${ex.getMessage}")
     }
 
   /**
    * Метод для удаления задачи из базы данных.
    *
-   * @param task Задача для удаления.
+   * @param id Id задачи для удаления.
+   * @param login Login пользователя.
    */
-  override def deleteTask(task: Task): Unit =
-    Connection.db.run(taskModelDao.deleteTask(task)).onComplete {
-      case Success(_) => println(s"The task with identifier ${task.id} has been successfully deleted.")
-      case Failure(ex) => println(s"Failed to delete the task: ${ex.getMessage}")
+  override def deleteTask(id: Int, login: String): Future[Any] =
+    Connection.db.run(taskModelDao.deleteTask(id, login)).map {
+      case id if id != 0 => println(s"The task with id $id has been successfully done.")
+      case _ => throw new NoSuchElementException("There is no task with such id")
+    }.recover {
+      case ex: NoSuchElementException =>
+        println(s"Failed to mark the task as done: ${ex.getMessage}")
+        ex
+      case ex =>
+        println(s"Failed to mark the task as done: ${ex.getMessage}")
+        ex
     }
 
   /**
@@ -115,26 +123,27 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
         Connection.db.run(taskModelDao.deleteDoneTasks(login)).map(_ => ()).recover {
           case ex => println(s"Failed to clear done tasks: ${ex.getMessage}")
         }
+      case _ => Future.failed(new MatchError("Invalid table name."))
     }
   }
 
   /**
    * Метод для обновления сущетсвующей задачи в базе данных.
    *
-   * @param task  Задача для обновления.
-   * @param login Логин пользователя.
+   * @param task Задача для обновления.
    */
-  override def updateTask(task: Task, login: String): Unit =
-    Connection.db.run(taskModelDao.updateTask(task, login)).onComplete {
+  override def updateTask(task: Task): Unit =
+    Connection.db.run(taskModelDao.updateTask(task)).onComplete {
       case Success(_) => println(s"Task updated! Title: ${task.title}")
       case Failure(ex) => println(s"Failed to update the task: ${ex.getMessage}")
     }
 
 }
+
 /**
  * Объект для хранения констант с названиями таблиц задач.
  */
 private object TableNames {
-  val DeleteTasks = "clearTasks"
-  val DeleteDoneTasks = "clearDoneTasks"
+  val DeleteTasks = "tasks"
+  val DeleteDoneTasks = "doneTasks"
 }

@@ -8,7 +8,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 trait UserRepository {
-  def insertUser(user: User): Unit
+  def insertUser(user: User): Future[Unit]
 
   def checkUserByLogin(login: String): Future[Boolean]
 
@@ -35,10 +35,11 @@ class UserRepositoryImpl @Inject()(userModelDao: UserModelDaoImpl) extends UserR
    *
    * @param user Пользователь для вставки.
    */
-  override def insertUser(user: User): Unit =
-    Connection.db.run(userModelDao.insertUser(user)).onComplete {
-      case Success(_) => println(s"A new user has been added! Login: ${user.login}")
-      case Failure(ex) => println(s"Failed to add a user: ${ex.getMessage}")
+  override def insertUser(user: User): Future[Unit] =
+    Connection.db.run(userModelDao.insertUser(user)).map { _ =>
+      println(s"A new user has been added! Login: ${user.login}")
+    }.recover {
+      case ex => println(s"Failed to add a user: ${ex.getMessage}")
     }
 
   /**

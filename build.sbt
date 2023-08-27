@@ -1,7 +1,7 @@
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .settings(
-    name := """To-Do-List""",
+    name := """To-Do-List-Api""",
     version := "1.0",
     scalaVersion := "2.13.11",
     libraryDependencies ++= Seq(
@@ -11,15 +11,13 @@ lazy val root = (project in file("."))
       "com.typesafe.slick" %% "slick" % "3.4.1",
       "org.postgresql" % "postgresql" % "42.5.4",
       "com.typesafe.slick" %% "slick-hikaricp" % "3.4.1",
-      "com.github.tminglei" %% "slick-pg" % "0.21.1",
-      "org.mindrot" % "jbcrypt" % "0.4"
+      "org.mindrot" % "jbcrypt" % "0.4",
+      "com.typesafe.play" %% "play-json" % "2.9.4"
     ),
     scalacOptions ++= Seq(
       "-feature",
       "-deprecation",
       "-Xfatal-warnings"
     ),
-    Universal / javaOptions ++= Seq(
-      "-Dpidfile.path=/dev/null"
-    )
+
   )

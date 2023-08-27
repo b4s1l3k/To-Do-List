@@ -60,7 +60,7 @@ class TaskServiceImpl @Inject()(taskRepository: TaskRepositoryImpl) extends Task
   override def updateTask(task: Task, login: String): Future[Unit] = {
     taskRepository.getTasks(login).map { allTasks =>
       allTasks.find(_.id == task.id) match {
-        case Some(_) => taskRepository.updateTask(task, login)
+        case Some(_) => taskRepository.updateTask(task)
         case None =>
           val errorMessage = s"Task with ID=${task.id} not found for user with Login=$login"
           println(errorMessage)
