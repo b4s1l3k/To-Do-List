@@ -9,8 +9,11 @@ import javax.inject.Inject
 
 trait UserModelDao {
   def insertUser(user: User): FixedSqlAction[Int, NoStream, Effect.Write]
+
   def checkUserByLogin(login: String): FixedSqlAction[Boolean, NoStream, Effect.Read]
+
   def getUserPassword(login: String): SqlAction[String, NoStream, Effect.Read]
+
   def getUsers: FixedSqlAction[Seq[User], NoStream, Effect.Read]
 }
 

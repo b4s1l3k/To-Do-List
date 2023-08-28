@@ -25,6 +25,7 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
   }
 
   private object TasksForm {
+
     import FormNames._
 
     /**
@@ -32,18 +33,9 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
      *
      * @return Результат Future[Result], содержащий NotFound с сообщением.
      */
-    def NoSuchElementExceptionError(implicit messages: Messages): Future[Result] =
-      Future.successful {
-        NotFound(views.html.tasks.notFound("Задача с указанным идентификатором не найдена"))
-      }
+    def NoSuchElementExceptionError(implicit messages: Messages): Result =
+      NotFound(views.html.tasks.notFound("Задача с указанным идентификатором не найдена"))
 
-    /**
-     * Генерирует ответ BadRequest с сообщением о непредвиденной ошибке формы.
-     *
-     * @return Результат BadRequest с сообщением об ошибке.
-     */
-    def FormWithUnexpectedError(implicit request: Request[AnyContent], messages: Messages): Result =
-      BadRequest(views.html.tasks.createTask(taskForm.withGlobalError("Непредвиденная ошибка")))
 
     /**
      * Генерирует ответ BadRequest с формой, содержащей ошибки валидации.
@@ -89,6 +81,15 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
             )
         }
       }
+
+    /**
+     * Генерирует ответ InternalServerError с непредвиденной ошибкой.
+     *
+     * @param ex ошибка.
+     * @return Результат InternalServerError с сообщением ошибки.
+     */
+    def UnexpectedError(ex: Throwable): Result =
+      InternalServerError(s"Произошла ошибка: ${ex.getMessage}")
   }
 
   /**
@@ -112,12 +113,18 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
    * @return HTTP-ответ с HTML-страницей, содержащей список всех задач.
    */
   def get_all: Action[AnyContent] = Action.async { implicit request =>
+    import TasksForm._
+
     withUserLogin { userLogin =>
-      for {
-        tasks <- taskRepository.getTasks(userLogin)
-      } yield Ok(views.html.tasks.listOfTasks(tasks))
+      taskRepository.getTasks(userLogin).map { tasks =>
+        Ok(views.html.tasks.listOfTasks(tasks))
+      }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
+
 
   /**
    * Действие для отображения информации о задаче по указанному идентификатору.
@@ -130,13 +137,16 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
   def getTask(id: Int): Action[AnyContent] = Action.async { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
     import TasksForm._
+
     withUserLogin { userLogin =>
       taskRepository.getOneTask(id, userLogin).map { task =>
         Ok(views.html.tasks.taskDetails(task))
-      }.recoverWith {
-        case _: NoSuchElementException =>
-          NoSuchElementExceptionError
       }
+    }.recover {
+      case _: NoSuchElementException =>
+        NoSuchElementExceptionError
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -148,7 +158,7 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
    */
   def create: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
-    Ok(views.html.tasks.createTask(taskForm))
+    Accepted(views.html.tasks.createTask(taskForm))
   }
 
   /**
@@ -178,13 +188,13 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
               .map { task =>
                 taskRepository.insertTask(task)
                 Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
-              }.recover {
-                case _: Throwable =>
-                  FormWithUnexpectedError
               }
           }
         }
       )
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -202,11 +212,13 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
 
     withUserLogin { userLogin =>
       taskRepository.getOneTask(id, userLogin).map { task =>
-        Ok(views.html.tasks.editTask(editForm.fill(task)))
-      }.recoverWith {
-        case _: NoSuchElementException =>
-          NoSuchElementExceptionError
+        Accepted(views.html.tasks.editTask(editForm.fill(task)))
       }
+    }.recover {
+      case _: NoSuchElementException =>
+        NoSuchElementExceptionError
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -241,6 +253,9 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
           }
         }
       )
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -258,17 +273,17 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
     withUserLogin { userLogin =>
       for {
         doneTask <- taskRepository.getOneTask(id, userLogin)
-        _ <- Future(taskRepository.deleteTask(doneTask))
+        _ <- Future.successful(taskRepository.deleteTask(doneTask))
         remainingTasks <- taskRepository.getTasks(userLogin)
       } yield Ok(views.html.tasks.deleteResult(doneTask, remainingTasks))
-    }.recoverWith {
+    }.recover {
       case _: NoSuchElementException =>
         NoSuchElementExceptionError
-    }.recover {
       case ex =>
-        InternalServerError(s"Произошла ошибка: ${ex.getMessage}")
+        UnexpectedError(ex)
     }
   }
+
 
   /**
    * Действие для отображения списка удаленных задач.
@@ -277,10 +292,15 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
    * @return HTTP-ответ с HTML-страницей, содержащей список удаленных задач.
    */
   def doneTasks: Action[AnyContent] = Action.async { implicit request =>
+    import TasksForm._
+
     withUserLogin { userLogin =>
-      for {
-        doneTask <- taskRepository.getDoneTasks(userLogin)
-      } yield Ok(views.html.tasks.doneTasks(doneTask))
+      taskRepository.getDoneTasks(userLogin).map { doneTasks =>
+        Ok(views.html.tasks.doneTasks(doneTasks))
+      }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -292,10 +312,15 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
    * @return HTTP-ответ с редиректом на страницу со списком всех задач.
    */
   def clear(tableName: String): Action[AnyContent] = Action.async { implicit request =>
+    import TasksForm._
+
     withUserLogin { userLogin =>
       taskRepository.deleteTasks(tableName, userLogin).map { _ =>
         Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userLogin)
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 

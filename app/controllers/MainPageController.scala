@@ -43,14 +43,6 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
       }
 
     /**
-     * Генерирует ответ BadRequest с формой, содержащей глобальную ошибку.
-     *
-     * @return Результат BadRequest с формой, содержащей глобальную ошибку.
-     */
-    def FormWithUnexpectedError(implicit request: Request[AnyContent], messages: Messages): Result =
-      BadRequest(views.html.users.registerUser(userForm.withGlobalError("Непредвиденная ошибка")))
-
-    /**
      * Генерирует ответ BadRequest с формой, содержащей ошибку неверного пароля.
      *
      * @param userData Пользовательские данные для заполнения формы.
@@ -60,6 +52,15 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
       Future.successful {
         BadRequest(views.html.users.loginUser(userForm.fill(userData).withError("Пароль", "Неверный пароль")))
       }
+
+    /**
+     * Генерирует ответ InternalServerError с непредвиденной ошибкой.
+     *
+     * @param ex ошибка.
+     * @return Результат InternalServerError с сообщением ошибки.
+     */
+    def UnexpectedError(ex: Throwable): Result =
+      InternalServerError(s"Произошла ошибка: ${ex.getMessage}")
   }
 
   /**
@@ -71,7 +72,7 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
   def showRegistrationForm: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
-    Ok(views.html.users.registerUser(userForm))
+    Accepted(views.html.users.registerUser(userForm))
   }
 
   /**
@@ -97,18 +98,18 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
             FormWithDuplicateLoginError
           } else {
             // Регистрируем пользователя и перенаправляем на страницу входа
-            usersService.createUser(userData.login, usersService.hashingPassword(userData.password))
+            usersService.createUser(userData.login, userData.password)
               .map { user =>
                 userRepository.insertUser(user)
                 Redirect(routes.MainPageController.firstTask).withSession("userLogin" -> userData.login)
-              }.recover {
-                case _: Throwable =>
-                  FormWithUnexpectedError
               }
           }
         }
       }
-    )
+    ).recover {
+      case ex =>
+        UnexpectedError(ex)
+    }
   }
 
   /**
@@ -120,7 +121,7 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
   def showLoginForm: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
-    Ok(views.html.users.loginUser(userForm))
+    Accepted(views.html.users.loginUser(userForm))
   }
 
   /**
@@ -150,9 +151,11 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
           }
         }
       }
-    )
+    ).recover {
+      case ex =>
+        UnexpectedError(ex)
+    }
   }
-
 
   /**
    * Действие для отображения страницы создания первого задания.
@@ -163,7 +166,7 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
   def firstTask: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
-    Ok(views.html.users.index(TaskForm.taskForm))
+    Accepted(views.html.users.index(TaskForm.taskForm))
   }
 
   /**
@@ -175,7 +178,7 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
   def weclomePage: Action[AnyContent] = Action { implicit request =>
     implicit val messages: Messages = messagesApi.preferred(request)
 
-    Ok(views.html.welcomePage("Filler. Need to fix"))
+    Accepted(views.html.welcomePage("Filler. Need to fix"))
   }
 
   /**
@@ -185,7 +188,6 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
    * @return HTTP-ответ с HTML-страницей для авторизации или регистрации.
    */
   def logout: Action[AnyContent] = Action {
-
     Redirect(routes.MainPageController.weclomePage).withSession()
   }
 

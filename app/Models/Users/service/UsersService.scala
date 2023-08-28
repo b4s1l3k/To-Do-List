@@ -13,7 +13,6 @@ trait UsersService {
 
   def checkUserPassword(login: String, password: String): Future[Boolean]
 
-  def hashingPassword(password: String): String
 }
 
 class UsersServiceImpl @Inject()(userRepository: UserRepositoryImpl) extends UsersService {
@@ -28,7 +27,7 @@ class UsersServiceImpl @Inject()(userRepository: UserRepositoryImpl) extends Use
    */
   override def createUser(login: String, password: String): Future[User] =
     userRepository.checkUserByLogin(login).map {
-      case false => Future.successful(User(login, password))
+      case false => Future.successful(User(login, hashingPassword(password)))
       case _ => Future.failed(new DuplicatedAccountException)
     }.flatten
 
@@ -50,7 +49,7 @@ class UsersServiceImpl @Inject()(userRepository: UserRepositoryImpl) extends Use
    * @param password Пароль пользователя для хеширования.
    * @return Захешированный пароль.
    */
-  override def hashingPassword(password: String): String = {
+  private def hashingPassword(password: String): String = {
     lazy val hashingRounds = 10
     BCrypt.hashpw(password, BCrypt.gensalt(hashingRounds))
   }

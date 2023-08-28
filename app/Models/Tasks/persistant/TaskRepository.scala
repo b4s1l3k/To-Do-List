@@ -37,7 +37,7 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
   override def getTasks(login: String): Future[Seq[Task]] =
     Connection.db.run(taskModelDao.getTasks(login)).andThen {
       case Success(tasks) => println(s"The following tasks were retrieved from the database: $tasks.")
-      case Failure(ex) => println(ex.getMessage)
+      case Failure(ex) => println(s"Error when retrieving tasks from the database: ${ex.getMessage}")
     }
 
   /**
@@ -48,8 +48,8 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
    */
   override def getDoneTasks(login: String): Future[Seq[Task]] =
     Connection.db.run(taskModelDao.getDoneTasks(login)).andThen {
-      case Success(tasks) => println(s"The following tasks were retrieved from the database: $tasks.")
-      case Failure(ex) => println(ex)
+      case Success(tasks) => println(s"The following done tasks were retrieved from the database: $tasks.")
+      case Failure(ex) => println(s"Error when retrieving done tasks from the database: ${ex.getMessage}")
     }
 
   /**
@@ -85,7 +85,7 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
     Connection.db.run(taskModelDao.getOneTask(id, login)).flatMap {
       case Some(task) =>
         println(s"The following task was retrieved from the database: $task.")
-        Future.successful(task)
+        Future(task)
       case None =>
         val errorMessage = s"The task with ID=$id was not found for user with Login=$login"
         println(errorMessage)
@@ -124,13 +124,15 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
    * @param task  Задача для обновления.
    * @param login Логин пользователя.
    */
-  override def updateTask(task: Task, login: String): Unit =
+  override def updateTask(task: Task, login: String): Unit = {
     Connection.db.run(taskModelDao.updateTask(task, login)).onComplete {
       case Success(_) => println(s"Task updated! Title: ${task.title}")
       case Failure(ex) => println(s"Failed to update the task: ${ex.getMessage}")
     }
+  }
 
 }
+
 /**
  * Объект для хранения констант с названиями таблиц задач.
  */

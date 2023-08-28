@@ -27,7 +27,7 @@ class UserRepositoryImpl @Inject()(userModelDao: UserModelDaoImpl) extends UserR
   override def getUsers: Future[Seq[User]] =
     Connection.db.run(userModelDao.getUsers).andThen {
       case Success(users) => println(s"The following users were retrieved from the database: $users.")
-      case Failure(ex) => println(ex)
+      case Failure(ex) => println(s"Error when retrieving users from the database: ${ex.getMessage}")
     }
 
   /**

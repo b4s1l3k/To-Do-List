@@ -105,7 +105,7 @@ class TaskModelDaoImpl @Inject() extends TaskModelDao {
    * @param login Логин пользователя.
    * @return Действие для удаления задач.
    */
-  override  def deleteTasks(tasks: Seq[Task], login: String): DBIOAction[Unit, NoStream, Effect.Write] =
+  override def deleteTasks(tasks: Seq[Task], login: String): DBIOAction[Unit, NoStream, Effect.Write] =
     DBIO.seq(
       taskTable ++= tasks,
       taskTable.filter(task => task.login === login.bind && task.status === false).delete
@@ -118,8 +118,8 @@ class TaskModelDaoImpl @Inject() extends TaskModelDao {
    * @return Запрос к базе данных для удаления завершенных задач.
    */
   override def deleteDoneTasks(login: String): FixedSqlAction[Int, NoStream, Effect.Write] =
-  taskTable
-    .filter(task => task.login === login && task.status === true)
-    .delete
+    taskTable
+      .filter(task => task.login === login && task.status === true)
+      .delete
 
 }
