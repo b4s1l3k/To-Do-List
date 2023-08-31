@@ -42,9 +42,6 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     def FailedAddTask(ex: Throwable): Result =
       BadRequest(Json.obj("failed" -> s"Failed to add a task: ${ex.getMessage}"))
 
-    def FailedUpdateTask(ex: Throwable): Result =
-      BadRequest(Json.obj("error" -> s"Failed to update task: ${ex.getMessage}"))
-
     def FailedClearTask(ex: Throwable): Result =
       BadRequest(Json.obj("failed" -> s"Failed to clear tasks: ${ex.getMessage}"))
   }
@@ -88,7 +85,6 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
 
     withUserLogin { userLogin =>
       taskJSON.getOneTask(id, userLogin).map { task =>
-        println("Ya zdes")
         Ok(task)
       }.recover {
         case _: NoSuchElementException =>
@@ -100,9 +96,12 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     }
   }
 
-  private def saveOrUpdate[T <: {def login: String}](action: T => Future[Result])(implicit request: Request[AnyContent], reads: Reads[T]): Future[Result] = {
+  private def saveOrUpdate[T <: {def login: String}](action: T => Future[Result])(implicit request: Request[AnyContent],
+                                                                                  reads: Reads[T]): Future[Result] = {
     import TasksForm._
 
+
+    // Написать Success и Failure вместо getOrElse
     val taskJson = Try(request.body.asJson.get).getOrElse(Json.obj())
     if (taskJson == Json.obj()) {
       InvalidJSONFormat
@@ -119,7 +118,7 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
                 WrongLogin
             }
           case Right(error) =>
-            Future(BadRequest(error))
+            Future.successful(BadRequest(error))
         }
       }
     }.recover {
@@ -134,6 +133,7 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     implicit val reads: Reads[IncompleteTask] = Json.reads[IncompleteTask]
 
     saveOrUpdate[IncompleteTask] { incompleteTask =>
+      // Убрать превращение в JSON
       taskJSON.createTask(Json.toJson(incompleteTask)).flatMap { newTask =>
         taskJSON.insertTask(newTask).map { result =>
           Created(result)
@@ -152,6 +152,7 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     import TasksForm._
 
     saveOrUpdate[Task] { updatedTask =>
+      // Убрать превращение в JSON
       taskJSON.updateTask(Json.toJson(updatedTask)).map { result =>
         Ok(result)
       }

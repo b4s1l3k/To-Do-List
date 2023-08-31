@@ -51,13 +51,13 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
           case Left(newUser) => {
             userRepository.insertUser(newUser)
             Future.successful(Created(Json.obj("success" -> "New user has been registered")))
-          }.recover {
-            case ex: Throwable =>
-              FormWithUnexpectedError(ex)
           }
           case Right(value) => Future.successful(BadRequest(value))
         }
       }
+    }.recover {
+      case ex: Throwable =>
+        FormWithUnexpectedError(ex)
     }
   }
 

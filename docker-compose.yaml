@@ -6,11 +6,27 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=4568
+      - POSTGRES_DB=postgres
     ports:
       - '5432:5432'
     volumes:
-      - db:/var/lib/postgresql11/data
-      - ./db/init-scripts.sql:/docker-entrypoint-initdb.d/scripts.sql
+      - ./docker/volumes/db:/var/lib/postgresql/data
+  play:
+    image: to-do-list-api:1.0
+    container_name: to-do-list-api
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./conf:/opt/docker/conf
+      - ./docker/volumes/play/files:/opt/docker/to-do-list-api_files
+      - ./docker/volumes/play/logs:/opt/docker/logs
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=4568
+      - POSTGRES_DB=postgres
+    depends_on:
+      - db
 
 volumes:
   db:
