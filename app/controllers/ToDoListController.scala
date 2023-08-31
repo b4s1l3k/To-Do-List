@@ -63,10 +63,10 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     withUserLogin { userLogin =>
       taskJSON.getTasks(userLogin).map { tasks =>
         Ok(tasks)
-      }.recover {
-        case ex =>
-          UnexpectedError(ex)
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -88,13 +88,15 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
 
     withUserLogin { userLogin =>
       taskJSON.getOneTask(id, userLogin).map { task =>
+        println("Ya zdes")
         Ok(task)
       }.recover {
         case _: NoSuchElementException =>
           NoSuchElementExceptionError
-        case ex =>
-          UnexpectedError(ex)
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -117,9 +119,12 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
                 WrongLogin
             }
           case Right(error) =>
-            Future.successful(BadRequest(error))
+            Future(BadRequest(error))
         }
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -136,10 +141,10 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
           case ex: Throwable =>
             FailedAddTask(ex)
         }
-      }.recover {
-        case ex: Throwable =>
-          UnexpectedError(ex)
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -149,23 +154,24 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     saveOrUpdate[Task] { updatedTask =>
       taskJSON.updateTask(Json.toJson(updatedTask)).map { result =>
         Ok(result)
-      }.recover {
-        case ex: Throwable =>
-          FailedUpdateTask(ex)
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
 
   def deleteOneTask(id: Int): Action[AnyContent] = Action.async { implicit request =>
+    import TasksForm._
 
     withUserLogin { userLogin =>
       taskJSON.deleteTask(id, userLogin).map { result =>
         Ok(result)
-      }.recover {
-        case ex =>
-          BadRequest(s"$ex")
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
@@ -181,6 +187,7 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
       }
     }
   }
+
 
   def debugToDoList: Action[AnyContent] = ???
 

@@ -12,8 +12,6 @@ trait UsersService {
   def createUser(login: String, password: String): Future[User]
 
   def checkUserPassword(login: String, password: String): Future[Boolean]
-
-  def hashingPassword(password: String): String
 }
 
 class UsersServiceImpl @Inject()(userRepository: UserRepositoryImpl) extends UsersService {
@@ -43,16 +41,5 @@ class UsersServiceImpl @Inject()(userRepository: UserRepositoryImpl) extends Use
     userRepository.getUserPassword(login).map { hashedPassword =>
       BCrypt.checkpw(password, hashedPassword)
     }
-
-  /**
-   * Метод для хеширования пароля пользователя.
-   *
-   * @param password Пароль пользователя для хеширования.
-   * @return Захешированный пароль.
-   */
-  override def hashingPassword(password: String): String = {
-    lazy val hashingRounds = 10
-    BCrypt.hashpw(password, BCrypt.gensalt(hashingRounds))
-  }
 
 }

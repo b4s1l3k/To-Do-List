@@ -71,15 +71,12 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
    */
   override def deleteTask(id: Int, login: String): Future[Any] =
     Connection.db.run(taskModelDao.deleteTask(id, login)).map {
-      case id if id != 0 => println(s"The task with id $id has been successfully done.")
-      case _ => throw new NoSuchElementException("There is no task with such id")
-    }.recover {
-      case ex: NoSuchElementException =>
-        println(s"Failed to mark the task as done: ${ex.getMessage}")
-        ex
-      case ex =>
-        println(s"Failed to mark the task as done: ${ex.getMessage}")
-        ex
+      case num: Int if num == 1 =>
+        println(s"The task  has been successfully done.")
+        num
+      case num: Int if num == 0 =>
+        println("There is no task with such id")
+        new NoSuchElementException("There is no task with such id")
     }
 
   /**
@@ -116,12 +113,12 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
             .filter(_.status == false)
             .map(task => task.copy(id = None, status = true))
           Connection.db.run(taskModelDao.deleteTasks(updatedTasks, login)).map(_ => ()).recover {
-            case ex => println(s"Failed to clear tasks: ${ex.getMessage}")
+            case ex: Throwable => println(s"Failed to clear tasks: ${ex.getMessage}")
           }
         }
       case DeleteDoneTasks =>
         Connection.db.run(taskModelDao.deleteDoneTasks(login)).map(_ => ()).recover {
-          case ex => println(s"Failed to clear done tasks: ${ex.getMessage}")
+          case ex: Throwable => println(s"Failed to clear done tasks: ${ex.getMessage}")
         }
       case _ => Future.failed(new MatchError("Invalid table name."))
     }

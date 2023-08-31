@@ -12,6 +12,10 @@ POST        /tasks/create            controllers.ToDoListController.save
 GET         /tasks/:id               controllers.ToDoListController.getTask(id: Int)
 POST        /tasks/edit              controllers.ToDoListController.update
 GET         /tasks/delete/:id        controllers.ToDoListController.deleteOneTask(id: Int)
-GET         /doneTasks                 controllers.ToDoListController.getDoneTasks
+GET         /doneTasks               controllers.ToDoListController.getDoneTasks
 GET         /clear/:tableName        controllers.ToDoListController.clear(tableName: String)
 GET         /debug1                  controllers.ToDoListController.debugToDoList
+
+# Methods of Swagger
+
+
