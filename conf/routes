@@ -1,21 +1,25 @@
 # Methods of main page
 
-POST        /register                controllers.MainPageController.saveUser
-POST        /login                   controllers.MainPageController.login
-GET         /debug2                  controllers.MainPageController.debugUsers
-
+POST        /register                 controllers.UserController.saveUser
+POST        /login                    controllers.UserController.login
 
 # Methods of To-Do List
 
-GET         /tasks                   controllers.ToDoListController.getTasks
-POST        /tasks/create            controllers.ToDoListController.save
-GET         /tasks/:id               controllers.ToDoListController.getTask(id: Int)
-POST        /tasks/edit              controllers.ToDoListController.update
-GET         /tasks/delete/:id        controllers.ToDoListController.deleteOneTask(id: Int)
-GET         /doneTasks               controllers.ToDoListController.getDoneTasks
-GET         /clear/:tableName        controllers.ToDoListController.clear(tableName: String)
-GET         /debug1                  controllers.ToDoListController.debugToDoList
+GET         /tasks                    controllers.ToDoListController.getTasks
+POST        /tasks/create             controllers.ToDoListController.save
+GET         /tasks/:id                controllers.ToDoListController.getTask(id: Int)
+POST        /tasks/edit               controllers.ToDoListController.update
+GET         /tasks/delete/:id         controllers.ToDoListController.deleteOneTask(id: Int)
+GET         /doneTasks                controllers.ToDoListController.getDoneTasks
+GET         /clear/:tableName         controllers.ToDoListController.clear(tableName: String)
 
-# Methods of Swagger
+# Swagger routes
+
+GET         /                         controllers.Default.redirect(to = "/docs/")
+GET         /docs/                    controllers.Assets.at(path="/public/swagger-ui",file="index.html")
+GET         /docs/swagger.json        controllers.ApiHelpController.getResources
+GET         /docs/*file               controllers.Assets.at(path="/public/swagger-ui",file)
+GET         /swagger.json             controllers.ApiHelpController.getResources
+
 
 

@@ -1,6 +1,12 @@
 package Models.Users.persistant
 
-final case class User(login: String, password: String)
+import io.swagger.annotations.ApiModel
+
+@ApiModel
+final case class User(
+                       login: String,
+                       password: String
+                     )
 
 object SlickTablesUser {
 

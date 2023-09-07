@@ -1,12 +1,14 @@
 package Models
 
-import Models.Connection.Connection
+import Models.Connection.Connection.db
 import Models.Users.persistant.SlickTablesUser._
 import Models.Tasks.persistant.SlickTablesTask._
 import Models.PrivateExecutionContext._
 
 import scala.util.{Failure, Success}
 import slick.jdbc.PostgresProfile.api._
+
+
 
 
 object PrivateMethods extends App {
@@ -18,7 +20,7 @@ object PrivateMethods extends App {
       userTable.delete
     )
     // Выполняем запрос к базе данных и выводим результат или ошибку.
-    Connection.db.run(finalQuery).onComplete {
+    db.run(finalQuery).onComplete {
       case Success(_) => println(s"All users have been deleted")
       case Failure(ex) => println(s"Failed to delete users: ${ex.getMessage}")
     }
@@ -32,14 +34,14 @@ object PrivateMethods extends App {
     )
 
     // Выполняем запрос к базе данных и выводим результат или ошибку.
-    Connection.db.run(finalQuery).onComplete {
+    db.run(finalQuery).onComplete {
       case Success(_) => println(s"The user with identifier $login has been successfully deleted.")
       case Failure(ex) => println(s"Failed to delete the user: ${ex.getMessage}")
     }
     Thread.sleep(5000)
   }
 
-  clearUsers()
+
 }
 
 

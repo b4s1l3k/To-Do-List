@@ -24,8 +24,6 @@ trait TaskJSON {
 
   def updateTask(dataJson: JsValue): Future[JsValue]
 
-  def createTask(dataJson: JsValue): Future[Task]
-
   def validDueDate(dataJson: JsValue): Either[Boolean, JsObject]
 
 }
@@ -57,28 +55,6 @@ class TaskJSONImpl @Inject()(taskRepository: TaskRepositoryImpl, taskService: Ta
     }
 
   /**
-   * Метод для создания новой задачи на основе JSON-данных.
-   *
-   * @param dataJson JSON-данные для создания задачи.
-   * @return Future[Task] с созданной задачей или ошибкой.
-   */
-  override def createTask(dataJson: JsValue): Future[Task] =
-    dataJson.validate[IncompleteTask] match {
-      case JsSuccess(task, _) =>
-        taskRepository.getTasks(task.login).map { listOfTasks =>
-          val nextTaskId = if (listOfTasks.isEmpty || listOfTasks.headOption.exists(_.id.getOrElse(0) != 1)) {
-            1
-          } else {
-            listOfTasks.map(_.id.getOrElse(0)).max + 1
-          }
-          Task(task.login, Some(nextTaskId), task.title, task.description, task.dueDate, task.supplement, status = false)
-        }
-      case JsError(errors) =>
-        // Обработать ошибки чтения JSON, например, выбросить исключение или вернуть пустой Future
-        Future.failed(new IllegalArgumentException(s"Invalid JSON: $errors"))
-    }
-
-  /**
    * Метод для вставки новой задачи.
    *
    * @param task Задача для вставки.
@@ -99,8 +75,8 @@ class TaskJSONImpl @Inject()(taskRepository: TaskRepositoryImpl, taskService: Ta
   override def deleteTask(id: Int, login: String): Future[JsValue] = {
 
     taskRepository.deleteTask(id, login).map {
-      case _: Int => Json.obj("succes" -> s"The task with has been successfully marked as done.")
-      case ex: Throwable => Json.obj("failure" -> s"Failed to mark the task as done: ${ex.getMessage}")
+      case _: Int => Json.obj("succes" -> s"The task has been successfully marked as done.")
+      case ex: NoSuchElementException => Json.obj("failure" -> s"Task not found")
     }
   }
 
@@ -126,7 +102,7 @@ class TaskJSONImpl @Inject()(taskRepository: TaskRepositoryImpl, taskService: Ta
    */
   override def deleteTasks(login: String, tableName: String): Future[JsValue] =
     taskRepository.deleteTasks(tableName, login).map { _ =>
-      Json.obj("success" -> s"The tasks have been deleted.")
+      Json.obj("success" -> s"Tasks have been deleted.")
     }
 
   /**
@@ -141,7 +117,7 @@ class TaskJSONImpl @Inject()(taskRepository: TaskRepositoryImpl, taskService: Ta
         taskService.updateTask(task, task.login).map { _ =>
           Json.obj("success" -> s"The task have been updated.")
         }
-      case JsError(_) => Future.successful(Json.obj("error" -> "Invalid JSON"))
+      case JsError(_) => Future.failed(new IllegalStateException("Invalid JSON"))
     }
 
   /**

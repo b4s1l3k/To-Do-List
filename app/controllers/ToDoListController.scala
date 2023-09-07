@@ -2,21 +2,27 @@ package controllers
 
 import Models.Tasks.persistant._
 import Models.PrivateExecutionContext._
+import Models.Tasks.service.TaskServiceImpl
+import io.swagger.annotations._
 import play.api.mvc._
 import play.api.libs.json._
 
 import javax.inject._
 import scala.concurrent.Future
 import scala.language.reflectiveCalls
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
+
+
+
+@Api(value = "Task Controller")
 @Singleton
-class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerComponents)
+class ToDoListController @Inject()(taskJSON: TaskJSONImpl, taskService: TaskServiceImpl, cc: ControllerComponents)
   extends AbstractController(cc) {
-
   implicit val format: OFormat[Task] = Json.format[Task]
 
-  private object TasksForm {
+
+  private object Forms {
 
     def NoSuchElementExceptionError: Result =
       NotFound(Json.obj("error" -> "The task with the specified identifier was not found."))
@@ -29,11 +35,6 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
         BadRequest(Json.obj("dataError" -> "Deadline date earlier than the current date"))
       }
 
-    def InvalidJSONFormat: Future[Result] =
-      Future.successful {
-        BadRequest(Json.obj("error" -> "Invalid JSON format"))
-      }
-
     def WrongLogin: Future[Result] =
       Future.successful {
         BadRequest(Json.obj("error" -> "Failed to update task: Wrong login"))
@@ -42,10 +43,12 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     def FailedAddTask(ex: Throwable): Result =
       BadRequest(Json.obj("failed" -> s"Failed to add a task: ${ex.getMessage}"))
 
-    def FailedClearTask(ex: Throwable): Result =
+    def FailedUpdateTask(ex: Throwable): Result =
+      BadRequest(Json.obj("failed" -> s"Failed to update a task: ${ex.getMessage}"))
+
+    def FailedClearTasks(ex: Throwable): Result =
       BadRequest(Json.obj("failed" -> s"Failed to clear tasks: ${ex.getMessage}"))
   }
-
 
   private def withUserLogin(f: String => Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
     request.cookies.get("userLogin") match {
@@ -54,8 +57,17 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     }
   }
 
+  @ApiOperation(
+    value = "Get all tasks",
+    response = classOf[Task],
+    responseContainer = "List",
+    notes = "Get a list of all tasks for the authenticated user.")
+  @ApiResponses(value = Array(
+    new ApiResponse(code = 401, message = "Need to login."),
+    new ApiResponse(code = 500, message = "Unforeseen error: \"error\".")
+  ))
   def getTasks: Action[AnyContent] = Action.async { implicit request =>
-    import TasksForm._
+    import Forms._
 
     withUserLogin { userLogin =>
       taskJSON.getTasks(userLogin).map { tasks =>
@@ -66,22 +78,40 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
         UnexpectedError(ex)
     }
   }
-
+  @ApiOperation(
+    value = "Get done tasks",
+    response = classOf[Task],
+    responseContainer = "List",
+    notes = "Get a list of all completed tasks for the authenticated user.")
+  @ApiResponses(Array(
+    new ApiResponse(code = 401, message = "Need to login."),
+    new ApiResponse(code = 500, message = "Unforeseen error: \"error\".")
+  ))
   def getDoneTasks: Action[AnyContent] = Action.async { implicit request =>
-    import TasksForm._
+    import Forms._
 
     withUserLogin { userLogin =>
       taskJSON.getDoneTasks(userLogin).map { doneTasks =>
         Ok(doneTasks)
-      }.recover {
-        case ex =>
-          UnexpectedError(ex)
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
 
-  def getTask(id: Int): Action[AnyContent] = Action.async { implicit request =>
-    import TasksForm._
+  @ApiOperation(
+    value = "Get a task by ID",
+    response = classOf[Task],
+    notes = "Get details of a task by its ID for the authenticated user."
+  )
+  @ApiResponses(Array(
+    new ApiResponse(code = 401, message = "Need to login."),
+    new ApiResponse(code = 404, message = "The task with the specified identifier was not found."),
+    new ApiResponse(code = 500, message = "Unforeseen error: \"error\".")
+  ))
+  def getTask(@ApiParam(value = "Task ID", required = true) id: Int): Action[AnyContent] = Action.async { implicit request =>
+    import Forms._
 
     withUserLogin { userLogin =>
       taskJSON.getOneTask(id, userLogin).map { task =>
@@ -98,43 +128,62 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
 
   private def saveOrUpdate[T <: {def login: String}](action: T => Future[Result])(implicit request: Request[AnyContent],
                                                                                   reads: Reads[T]): Future[Result] = {
-    import TasksForm._
+    import Forms._
 
-
-    // Написать Success и Failure вместо getOrElse
-    val taskJson = Try(request.body.asJson.get).getOrElse(Json.obj())
-    if (taskJson == Json.obj()) {
-      InvalidJSONFormat
-    } else {
-      withUserLogin { userLogin =>
-        taskJSON.validDueDate(taskJson) match {
-          case Left(flag) if flag =>
-            WrongDate
-          case Left(_) =>
-            taskJson.validate[T] match {
-              case JsSuccess(task, _) if task.login == userLogin =>
-                action(task)
-              case _ =>
-                WrongLogin
-            }
-          case Right(error) =>
-            Future.successful(BadRequest(error))
+    Try(request.body.asJson.get) match {
+      case Failure(ex) => Future.successful(UnexpectedError(ex))
+      case Success(taskJson) =>
+        withUserLogin { userLogin =>
+          taskJSON.validDueDate(taskJson) match {
+            case Left(flag) if flag =>
+              WrongDate
+            case Left(_) =>
+              taskJson.validate[T] match {
+                case JsSuccess(task, _) if task.login == userLogin =>
+                  action(task)
+                case _ =>
+                  WrongLogin
+              }
+            case Right(error) =>
+              Future.successful(BadRequest(error))
+          }
+        }.recover {
+          case ex =>
+            UnexpectedError(ex)
         }
-      }
-    }.recover {
-      case ex =>
-        UnexpectedError(ex)
     }
   }
 
+  @ApiOperation(
+    value = "Create a new task",
+    notes = "Create a new task for the authenticated user."
+  )
+  @ApiResponses(Array(
+    new ApiResponse(code = 201, message = "A new task has been added! Title: \"task title\"."),
+    new ApiResponse(code = 400, message = "Failed to add a task: \"error\"."),
+    new ApiResponse(code = 400, message = "Deadline date earlier than the current date."),
+    new ApiResponse(code = 401, message = "Need to login."),
+    new ApiResponse(code = 500, message = "Unforeseen error: \"error\".")
+  ))
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(
+      name = "Incomplete task data",
+      value = "Incomplete Task data in JSON format",
+      required = true,
+      dataTypeClass = classOf[IncompleteTask],
+      paramType = "body")
+  ))
   def save: Action[AnyContent] = Action.async { implicit request =>
-    import TasksForm._
-    implicit val writes: Writes[IncompleteTask] = Json.writes[IncompleteTask]
+    import Forms._
     implicit val reads: Reads[IncompleteTask] = Json.reads[IncompleteTask]
 
     saveOrUpdate[IncompleteTask] { incompleteTask =>
-      // Убрать превращение в JSON
-      taskJSON.createTask(Json.toJson(incompleteTask)).flatMap { newTask =>
+      taskService.createTask(incompleteTask.login,
+                             incompleteTask.title,
+                             incompleteTask.description,
+                             incompleteTask.dueDate,
+                             incompleteTask.supplement,
+                             status = false).flatMap { newTask =>
         taskJSON.insertTask(newTask).map { result =>
           Created(result)
         }.recover {
@@ -148,48 +197,85 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, cc: ControllerCompone
     }
   }
 
+  @ApiOperation(
+    value = "Update an existing task",
+    notes = "Update an existing task for the authenticated user.")
+  @ApiResponses(Array(
+    new ApiResponse(code = 200, message = "The task have been updated."),
+    new ApiResponse(code = 400, message = "Failed to update a task: \"error\"."),
+    new ApiResponse(code = 401, message = "Need to login."),
+    new ApiResponse(code = 500, message = "Unforeseen error: \"error\".")
+  ))
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(
+      name = "Task",
+      value = "Task data in JSON format",
+      required = true,
+      dataTypeClass = classOf[Task],
+      paramType = "body")
+  ))
   def update: Action[AnyContent] = Action.async { implicit request =>
-    import TasksForm._
+    import Forms._
 
     saveOrUpdate[Task] { updatedTask =>
-      // Убрать превращение в JSON
       taskJSON.updateTask(Json.toJson(updatedTask)).map { result =>
         Ok(result)
       }
     }.recover {
+      case ex: IllegalStateException =>
+        FailedUpdateTask(ex)
+
       case ex =>
         UnexpectedError(ex)
     }
   }
 
-
-  def deleteOneTask(id: Int): Action[AnyContent] = Action.async { implicit request =>
-    import TasksForm._
+  @ApiOperation(
+    value = "Delete a task by ID",
+    notes = "Delete a task by its ID for the authenticated user.")
+  @ApiResponses(Array(
+    new ApiResponse(code = 200, message = "The task has been successfully marked as done."),
+    new ApiResponse(code = 404, message = "Task not found."),
+    new ApiResponse(code = 500, message = "Unforeseen error: \"error\".")
+  ))
+  def deleteOneTask(@ApiParam(value = "Task ID", required = true) id: Int): Action[AnyContent] = Action.async {
+    implicit request =>
+    import Forms._
 
     withUserLogin { userLogin =>
       taskJSON.deleteTask(id, userLogin).map { result =>
         Ok(result)
       }
     }.recover {
+      case _: NoSuchElementException =>
+        NoSuchElementExceptionError
       case ex =>
         UnexpectedError(ex)
     }
   }
 
-  def clear(tableName: String): Action[AnyContent] = Action.async { implicit request =>
-    import TasksForm._
+  @ApiOperation(
+    value = "Clear tasks",
+    notes = "Clear completed or uncompleted tasks for the authenticated user.")
+  @ApiResponses(Array(
+    new ApiResponse(code = 200, message = "Tasks have been deleted."),
+    new ApiResponse(code = 400, message = "Failed to clear tasks: \"error\"."),
+    new ApiResponse(code = 500, message = "Unforeseen error: \"error\".")
+  ))
+  def clear(@ApiParam(name = "tasks or doneTasks", value = "Type of the task", required = true) tableName: String): Action[AnyContent] = Action.async {
+    implicit request =>
+    import Forms._
 
     withUserLogin { userLogin =>
       taskJSON.deleteTasks(userLogin, tableName).map { result =>
         Ok(result)
       }.recover {
         case ex =>
-          FailedClearTask(ex)
+          FailedClearTasks(ex)
       }
+    }.recover {
+      case ex =>
+        UnexpectedError(ex)
     }
   }
-
-
-  def debugToDoList: Action[AnyContent] = ???
-
 }

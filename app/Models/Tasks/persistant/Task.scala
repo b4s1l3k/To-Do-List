@@ -1,14 +1,29 @@
 package Models.Tasks.persistant
 
+import io.swagger.annotations.{ApiModel, ApiModelProperty}
+
 import java.time.LocalDate
 
-final case class Task(login: String,
-                id: Option[Int],
-                title: String,
-                description: String,
-                dueDate: LocalDate,
-                supplement: Option[String],
-                status: Boolean)
+@ApiModel
+final case class Task(
+                       login: String,
+                       @ApiModelProperty(
+                         dataType = "int",
+                         example = "Optional[Int]",
+                       )
+                       id: Option[Int],
+                       title: String,
+                       description: String,
+                       @ApiModelProperty(
+                         dataType = "Date",
+                         example = "yyyy-mm-dd",
+                         required = true
+                       )
+                       dueDate: LocalDate,
+                       supplement: Option[String],
+
+                       status: Boolean
+                     )
 
 object SlickTablesTask {
 
