@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   app:
+    build: target/docker/stage/
     image: to-do-list:1.1
     depends_on:
       - db
