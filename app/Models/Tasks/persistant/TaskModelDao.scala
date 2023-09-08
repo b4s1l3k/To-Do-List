@@ -18,7 +18,7 @@ trait TaskModelDao {
 
   def getOneTask(id: Int, login: String): SqlAction[Option[Task], NoStream, Effect.Read]
 
-  def updateTask(task: Task): FixedSqlAction[Int, NoStream, Effect.Write]
+  def updateTask(id: Int, task: Task): FixedSqlAction[Int, NoStream, Effect.Write]
 
   def deleteTasks(tasks: Seq[Task], login: String): DBIOAction[Unit, NoStream, Effect.Write]
 
@@ -92,9 +92,9 @@ class TaskModelDaoImpl @Inject() extends TaskModelDao {
    * @param task Задача для обновления.
    * @return Запрос к базе данных для обновления задачи.
    */
-  override def updateTask(task: Task): FixedSqlAction[Int, NoStream, Effect.Write] =
+  override def updateTask(id: Int, task: Task): FixedSqlAction[Int, NoStream, Effect.Write] =
     taskTable
-      .filter(t => t.id === task.id && t.login === task.login)
+      .filter(t => t.login === task.login && t.id === id)
       .update(task)
 
   /**

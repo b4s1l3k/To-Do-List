@@ -22,7 +22,7 @@ trait TaskJSON {
 
   def deleteTasks(login: String, tableName: String): Future[JsValue]
 
-  def updateTask(dataJson: JsValue): Future[JsValue]
+  def updateTask(id: Int, dataJson: JsValue): Future[JsValue]
 
   def validDueDate(dataJson: JsValue): Either[Boolean, JsObject]
 
@@ -76,7 +76,7 @@ class TaskJSONImpl @Inject()(taskRepository: TaskRepositoryImpl, taskService: Ta
 
     taskRepository.deleteTask(id, login).map {
       case _: Int => Json.obj("succes" -> s"The task has been successfully marked as done.")
-      case ex: NoSuchElementException => Json.obj("failure" -> s"Task not found")
+      case _: NoSuchElementException => Json.obj("failure" -> s"Task not found")
     }
   }
 
@@ -111,10 +111,10 @@ class TaskJSONImpl @Inject()(taskRepository: TaskRepositoryImpl, taskService: Ta
    * @param dataJson JSON-данные для обновления задачи.
    * @return Future[JsValue] с информацией об успешном обновлении или ошибке.
    */
-  override def updateTask(dataJson: JsValue): Future[JsValue] =
+  override def updateTask(id: Int, dataJson: JsValue): Future[JsValue] =
     dataJson.validate[Task] match {
       case JsSuccess(task, _) =>
-        taskService.updateTask(task, task.login).map { _ =>
+        taskService.updateTask(id, task, task.login).map { _ =>
           Json.obj("success" -> s"The task have been updated.")
         }
       case JsError(_) => Future.failed(new IllegalStateException("Invalid JSON"))

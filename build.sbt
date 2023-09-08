@@ -1,12 +1,12 @@
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, DockerPlugin /*SwaggerPlugin*/)
+  .enablePlugins(PlayScala)
   .settings(
     name := """To-Do-List-Api""",
-    version := "1.0",
+    version := "1.1",
     scalaVersion := "2.13.11",
 
     dockerBaseImage := "openjdk:11.0.7",
-    dockerExposedPorts := Seq(9443),
+    dockerExposedPorts := Seq(9000),
 
     libraryDependencies ++= Seq(
       guice,
@@ -17,7 +17,6 @@ lazy val root = (project in file("."))
       "com.typesafe.slick" %% "slick-hikaricp" % "3.4.1",
       "org.mindrot" % "jbcrypt" % "0.4",
       "com.typesafe.play" %% "play-json" % "2.9.4",
-      "com.spotify" % "docker-client" % "8.16.0",
       "org.webjars" % "swagger-ui" % "4.18.1",
       "com.github.dwickern" %% "swagger-play2.8" % "3.1.0",
       "io.swagger" % "swagger-core" % "1.6.2",
@@ -27,8 +26,5 @@ lazy val root = (project in file("."))
       "-feature",
       "-deprecation",
       "-Xfatal-warnings"
-    ),
-    Universal / javaOptions ++= Seq(
-      "-Dpidfile.path=/dev/null"
     ),
   )

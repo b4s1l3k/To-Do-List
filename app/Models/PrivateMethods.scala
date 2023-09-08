@@ -41,6 +41,7 @@ object PrivateMethods extends App {
     Thread.sleep(5000)
   }
 
+  clearUsers()
 
 }
 

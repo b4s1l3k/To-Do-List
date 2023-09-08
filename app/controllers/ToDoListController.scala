@@ -2,6 +2,7 @@ package controllers
 
 import Models.Tasks.persistant._
 import Models.PrivateExecutionContext._
+import Models.Tasks.errors.IdChangeError
 import Models.Tasks.service.TaskServiceImpl
 import io.swagger.annotations._
 import play.api.mvc._
@@ -11,8 +12,6 @@ import javax.inject._
 import scala.concurrent.Future
 import scala.language.reflectiveCalls
 import scala.util.{Failure, Success, Try}
-
-
 
 
 @Api(value = "Task Controller")
@@ -80,7 +79,7 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, taskService: TaskServ
   }
   @ApiOperation(
     value = "Get done tasks",
-    response = classOf[Task],
+    response = classOf[DoneTask],
     responseContainer = "List",
     notes = "Get a list of all completed tasks for the authenticated user.")
   @ApiResponses(Array(
@@ -149,6 +148,8 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, taskService: TaskServ
           }
         }.recover {
           case ex =>
+            println(123)
+            println(ex.getMessage)
             UnexpectedError(ex)
         }
     }
@@ -192,8 +193,7 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, taskService: TaskServ
         }
       }
     }.recover {
-      case ex =>
-        UnexpectedError(ex)
+      case ex => UnexpectedError(ex)
     }
   }
 
@@ -214,19 +214,21 @@ class ToDoListController @Inject()(taskJSON: TaskJSONImpl, taskService: TaskServ
       dataTypeClass = classOf[Task],
       paramType = "body")
   ))
-  def update: Action[AnyContent] = Action.async { implicit request =>
+  def update(@ApiParam(value = "Task ID", required = true) id: Int): Action[AnyContent] = Action.async { implicit request =>
     import Forms._
 
     saveOrUpdate[Task] { updatedTask =>
-      taskJSON.updateTask(Json.toJson(updatedTask)).map { result =>
+      taskJSON.updateTask(id, Json.toJson(updatedTask)).map { result =>
         Ok(result)
+      }.recover {
+        case _: NoSuchElementException =>
+          NoSuchElementExceptionError
+        case ex: IdChangeError =>
+          FailedUpdateTask(ex)
       }
     }.recover {
       case ex: IllegalStateException =>
         FailedUpdateTask(ex)
-
-      case ex =>
-        UnexpectedError(ex)
     }
   }
 

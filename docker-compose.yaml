@@ -1,33 +1,36 @@
 version: '3.8'
 services:
+  app:
+    build: target/docker/stage/
+    image: to-do-list-api:1.1
+    depends_on:
+      - db
+    ports:
+      - "9000:9000"
+    networks:
+      - default
+    environment:
+      - PGHOST=db
+      - POSTGRES_PASSWORD=4568
+
   db:
-    image: postgres
+    image: postgres:15
     restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=4568
-      - POSTGRES_DB=postgres
+    networks:
+      - default
     ports:
       - '5432:5432'
     volumes:
-      - ./docker/volumes/db:/var/lib/postgresql/data
-  play:
-    image: to-do-list-api:1.0
-    container_name: to-do-list-api
-    restart: always
-    ports:
-      - "9000:9000"
-    volumes:
-      - ./conf:/opt/docker/conf
-      - ./docker/volumes/play/files:/opt/docker/to-do-list-api_files
-      - ./docker/volumes/play/logs:/opt/docker/logs
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=4568
-      - POSTGRES_DB=postgres
-    depends_on:
-      - db
+      - db:/var/lib/postgresql15/data
+      - ./db/init-scripts.sql:/docker-entrypoint-initdb.d/scripts.sql
 
 volumes:
   db:
     driver: local
+
+networks:
+  default:
+    driver: bridge

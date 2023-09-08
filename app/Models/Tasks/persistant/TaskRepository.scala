@@ -21,7 +21,7 @@ trait TaskRepository {
 
   def deleteTasks(tableName: String, login: String): Future[Unit]
 
-  def updateTask(task: Task): Unit
+  def updateTask(id: Int, task: Task): Unit
 
 }
 
@@ -120,7 +120,9 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
         Connection.db.run(taskModelDao.deleteDoneTasks(login)).map(_ => ()).recover {
           case ex: Throwable => println(s"Failed to clear done tasks: ${ex.getMessage}")
         }
-      case _ => Future.failed(new MatchError("Invalid table name."))
+      case _ =>
+        println("Invalid table name.")
+        Future.failed(new MatchError("Invalid table name."))
     }
   }
 
@@ -129,8 +131,8 @@ class TaskRepositoryImpl @Inject()(taskModelDao: TaskModelDaoImpl) extends TaskR
    *
    * @param task Задача для обновления.
    */
-  override def updateTask(task: Task): Unit =
-    Connection.db.run(taskModelDao.updateTask(task)).onComplete {
+  override def updateTask(id: Int, task: Task): Unit =
+    Connection.db.run(taskModelDao.updateTask(id, task)).onComplete {
       case Success(_) => println(s"Task updated! Title: ${task.title}")
       case Failure(ex) => println(s"Failed to update the task: ${ex.getMessage}")
     }

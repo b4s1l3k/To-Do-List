@@ -2,6 +2,7 @@ package Models.Tasks.service
 
 import Models.Tasks.persistant.{Task, TaskRepositoryImpl}
 import Models.PrivateExecutionContext._
+import Models.Tasks.errors.IdChangeError
 
 import java.time.LocalDate
 import javax.inject.Inject
@@ -16,7 +17,7 @@ trait TaskService {
                  supplement: Option[String],
                  status: Boolean): Future[Task]
 
-  def updateTask(task: Task, login: String): Future[Unit]
+  def updateTask(id: Int, task: Task, login: String): Future[Unit]
 }
 
 class TaskServiceImpl @Inject()(taskRepository: TaskRepositoryImpl) extends TaskService {
@@ -57,15 +58,21 @@ class TaskServiceImpl @Inject()(taskRepository: TaskRepositoryImpl) extends Task
    *         В случае отсутствия задачи с указанным идентификатором для указанного пользователя,
    *         Future завершится ошибкой NoSuchElementException.
    */
-  override def updateTask(task: Task, login: String): Future[Unit] = {
-    taskRepository.getTasks(login).map { allTasks =>
-      allTasks.find(_.id == task.id) match {
-        case Some(_) => taskRepository.updateTask(task)
-        case None =>
-          val errorMessage = s"Task with ID=${task.id} not found for user with Login=$login"
-          println(errorMessage)
-          Future.failed(new NoSuchElementException(errorMessage))
+  override def updateTask(id: Int, task: Task, login: String): Future[Unit] = {
+    if (id == task.id.get) {
+      taskRepository.getTasks(login).map { allTasks =>
+        allTasks.find(_.id.get == id) match {
+          case Some(_) => taskRepository.updateTask(id, task)
+          case None =>
+            val errorMessage = s"Task with ID=${task.id} not found for user with Login=$login"
+            println(errorMessage)
+            Future.failed(throw new NoSuchElementException(errorMessage))
+        }
       }
+    } else {
+      println("The user tried to change the task id.")
+      Future.failed(IdChangeError(id)())
     }
+
   }
 }

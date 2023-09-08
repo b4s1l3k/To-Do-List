@@ -10,6 +10,7 @@ final case class Task(
                        @ApiModelProperty(
                          dataType = "int",
                          example = "Optional[Int]",
+                         required = true
                        )
                        id: Option[Int],
                        title: String,
@@ -21,7 +22,11 @@ final case class Task(
                        )
                        dueDate: LocalDate,
                        supplement: Option[String],
-
+                       @ApiModelProperty(
+                         dataType = "boolean",
+                         example = "false",
+                         required = true
+                       )
                        status: Boolean
                      )
 
