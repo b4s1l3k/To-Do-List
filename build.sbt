@@ -4,10 +4,13 @@ lazy val root = (project in file("."))
     name := """To-Do-List""",
     version := "1.1",
     scalaVersion := "2.13.11",
+
+    dockerBaseImage := "openjdk:11.0.7",
+    dockerExposedPorts := Seq(9000),
+
     libraryDependencies ++= Seq(
       guice,
       "com.h2database" % "h2" % "2.1.214",
-      "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
       "com.typesafe.slick" %% "slick" % "3.4.1",
       "org.postgresql" % "postgresql" % "42.5.4",
       "com.typesafe.slick" %% "slick-hikaricp" % "3.4.1",

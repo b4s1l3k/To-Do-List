@@ -190,14 +190,4 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
   def logout: Action[AnyContent] = Action {
     Redirect(routes.MainPageController.weclomePage).withSession()
   }
-
-  /**
-   * Debug метод (пустое тело метода).
-   * Этот метод не имеет реализации и используется для отладки.
-   * Не используйте этот метод в финальной версии приложения.
-   *
-   * @return HTTP-ответ (пустое тело).
-   */
-  def debugUsers: Action[AnyContent] = ???
-
 }

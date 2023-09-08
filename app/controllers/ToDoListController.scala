@@ -141,10 +141,11 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
     withUserLogin { userLogin =>
       taskRepository.getOneTask(id, userLogin).map { task =>
         Ok(views.html.tasks.taskDetails(task))
+      }.recover {
+        case _: NoSuchElementException =>
+          NoSuchElementExceptionError
       }
     }.recover {
-      case _: NoSuchElementException =>
-        NoSuchElementExceptionError
       case ex =>
         UnexpectedError(ex)
     }
@@ -323,13 +324,4 @@ class ToDoListController @Inject()(taskRepository: TaskRepositoryImpl, taskServi
         UnexpectedError(ex)
     }
   }
-
-  /**
-   * Debug метод (пустое тело метода).
-   * Этот метод не имеет реализации и используется для отладки.
-   * Не используйте этот метод в финальной версии приложения.
-   *
-   * @return HTTP-ответ (пустое тело).
-   */
-  def debugToDoList: Action[AnyContent] = ???
 }

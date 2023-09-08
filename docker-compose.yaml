@@ -1,17 +1,35 @@
 version: '3.8'
 services:
+  app:
+    image: to-do-list:1.1
+    depends_on:
+      - db
+    ports:
+      - "9000:9000"
+    networks:
+      - default
+    environment:
+      - PGHOST=db
+      - POSTGRES_PASSWORD=4568
+
   db:
-    image: postgres
+    image: postgres:15
     restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=4568
+    networks:
+      - default
     ports:
       - '5432:5432'
     volumes:
-      - db:/var/lib/postgresql11/data
+      - db:/var/lib/postgresql15/data
       - ./db/init-scripts.sql:/docker-entrypoint-initdb.d/scripts.sql
 
 volumes:
-  db:
-    driver: local
+   db:
+     driver: local
+
+networks:
+  default:
+    driver: bridge

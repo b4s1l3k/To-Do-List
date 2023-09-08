@@ -1,0 +1,25 @@
+# Methods of main page
+
+GET         /                        controllers.MainPageController.weclomePage
+GET         /main                    controllers.MainPageController.firstTask
+POST        /main                    controllers.ToDoListController.save
+GET         /register                controllers.MainPageController.showRegistrationForm
+POST        /register                controllers.MainPageController.saveUser
+GET         /login                   controllers.MainPageController.showLoginForm
+POST        /login                   controllers.MainPageController.login
+GET         /logout                  controllers.MainPageController.logout
+GET         /debug2                  controllers.MainPageController.debugUsers
+
+
+# Methods of To-Do List
+
+GET         /tasks                   controllers.ToDoListController.get_all
+GET         /tasks/create            controllers.ToDoListController.create
+POST        /tasks/create            controllers.ToDoListController.save
+GET         /tasks/:id               controllers.ToDoListController.getTask(id: Int)
+GET         /tasks/edit/:id          controllers.ToDoListController.edit(id: Int)
+POST        /tasks/edit              controllers.ToDoListController.update
+GET         /tasks/delete/:id        controllers.ToDoListController.deleteOneTask(id: Int)
+GET         /deleted                 controllers.ToDoListController.doneTasks
+GET         /clear/:tableName        controllers.ToDoListController.clear(tableName: String)
+GET         /debug1                  controllers.ToDoListController.debugToDoList
