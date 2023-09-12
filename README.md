@@ -10,4 +10,4 @@ In the "main" branch is a version of my application with a user interface.
 # API branch
 The "api" branch stores a version of my application in the form of an API. You can go to `localhost:9000/` to view detailed documentation.
 # Start-up instructions
-To start, navigate to the application or API folder and enter the **`docker-compose up --build`** command with Docker running. This will automatically create a docker image with the application and database and start the docker container. Next, navigate to `localhost:9000/` to display the start page or view documentation for the API.
+To start, navigate to the application or API folder and enter the **`docker compose up --build`** command with Docker running. This will automatically create a docker image with the application and database and start the docker container. Next, navigate to `localhost:9000/` to display the start page or view documentation for the API.
