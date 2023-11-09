@@ -66,10 +66,10 @@
             @helper.form(action = helper.CSRF(routes.MainPageController.login)) {
                 @helper.CSRF.formField
                 <div class="form-group">
-                @helper.inputText(userForm("Логин"))
+                @helper.inputText(userForm("login"))
                 </div>
                 <div class="form-group">
-                @helper.inputPassword(userForm("Пароль"))
+                @helper.inputPassword(userForm("password"))
                 </div>
                 <div class="form-group">
                     <button type="submit">Войти</button>

@@ -9,8 +9,8 @@ object UserForm {
 
   val userForm: Form[User] = Form {
     mapping(
-      "Логин" -> nonEmptyText,
-      "Пароль" -> nonEmptyText
+      "login" -> nonEmptyText,
+      "password" -> nonEmptyText
     )(User.apply)(User.unapply)
 
   }

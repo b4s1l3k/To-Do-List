@@ -38,6 +38,7 @@ class TaskServiceImpl @Inject()(taskRepository: TaskRepositoryImpl) extends Task
                           dueDate: LocalDate,
                           supplement: Option[String],
                           status: Boolean): Future[Task] = {
+
     taskRepository.getTasks(login).map { listOfTasks =>
       val nextTaskId = if (listOfTasks.isEmpty || listOfTasks.headOption.exists(_.id.getOrElse(0) != 1)) {
         1
