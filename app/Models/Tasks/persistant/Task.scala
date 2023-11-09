@@ -35,19 +35,19 @@ object SlickTablesTask {
   import slick.jdbc.PostgresProfile.api._
 
   class TaskTable(tag: Tag) extends Table[Task](tag, Some("tasks"), "All Tasks") {
-    def login = column[String]("Логин")
+    def login = column[String]("login")
 
-    def id = column[Option[Int]]("ID")
+    def id = column[Option[Int]]("id")
 
-    def title = column[String]("Заголовок")
+    def title = column[String]("title")
 
-    def description = column[String]("Описание")
+    def description = column[String]("description")
 
-    def dueDate = column[LocalDate]("Дедлайн")
+    def dueDate = column[LocalDate]("deadline")
 
-    def supplement = column[Option[String]]("Дополнение")
+    def supplement = column[Option[String]]("supplement")
 
-    def status = column[Boolean]("Выполнена")
+    def status = column[Boolean]("status")
 
     override def * = (login, id, title, description, dueDate, supplement, status) <> (Task.tupled, Task.unapply)
   }

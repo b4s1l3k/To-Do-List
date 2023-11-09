@@ -14,9 +14,9 @@ object SlickTablesUser {
 
   class TableUser(tag: Tag) extends Table[User](tag, Some("tasks"), "Users") {
 
-    def login = column[String]("Логин", O.PrimaryKey)
+    def login = column[String]("login", O.PrimaryKey)
 
-    def password = column[String]("Пароль")
+    def password = column[String]("password")
 
     override def * = (login, password) <> (User.tupled, User.unapply)
   }
