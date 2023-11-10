@@ -39,7 +39,17 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
      */
     def FormWithDuplicateLoginError(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
       Future.successful {
-        BadRequest(views.html.users.registerUser(userForm.withError("Логин", "Этот логин уже занят")))
+        BadRequest(views.html.users.registerUser(userForm.withError("login", "Этот логин уже занят")))
+      }
+
+    /**
+     * Генерирует ответ BadRequest с формой, содержащей ошибку отсутствия пользователя с таким логином.
+     *
+     * @return Результат BadRequest с формой, содержащей ошибку отсутствия пользователя с таким логином.
+     */
+    def FormWithInvalidLogin(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
+      Future.successful {
+        BadRequest(views.html.users.loginUser(userForm.withError("login", "Неправильный логин")))
       }
 
     /**
@@ -50,7 +60,7 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
      */
     def FormWithInvalidPassword(userData: User)(implicit request: Request[AnyContent], messages: Messages): Future[Result] =
       Future.successful {
-        BadRequest(views.html.users.loginUser(userForm.fill(userData).withError("Пароль", "Неверный пароль")))
+        BadRequest(views.html.users.loginUser(userForm.fill(userData).withError("password", "Неверный пароль")))
       }
 
     /**
@@ -140,14 +150,21 @@ class MainPageController @Inject()(userRepository: UserRepositoryImpl,
     userForm.bindFromRequest().fold(
       formWithErrors => FormWithError(formWithErrors),
       userData => {
-        usersService.checkUserPassword(userData.login, userData.password).flatMap { correctPassword =>
-          if (correctPassword) {
-            // Пароль верный, перенаправляем на главную страницу
-            Future.successful(Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userData.login))
+        userRepository.checkUserByLogin(userData.login).flatMap { userExist =>
+          if (userExist) {
+            usersService.checkUserPassword(userData.login, userData.password).flatMap { correctPassword =>
+              if (correctPassword) {
+                // Пароль верный, перенаправляем на главную страницу
+                Future.successful(Redirect(routes.ToDoListController.get_all).withSession("userLogin" -> userData.login))
 
+              } else {
+                // Пароль неверный, добавляем ошибку к форме userForm
+                FormWithInvalidPassword(userData)
+              }
+            }
           } else {
-            // Пароль неверный, добавляем ошибку к форме userForm
-            FormWithInvalidPassword(userData)
+            // Нет такого пользователя, добавляем ошибку к форме userForm
+            FormWithInvalidLogin
           }
         }
       }
