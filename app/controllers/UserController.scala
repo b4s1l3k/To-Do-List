@@ -13,7 +13,7 @@ import javax.inject._
 @Api(value = "User Controller")
 @Singleton
 class UserController @Inject()(userRepository: UserRepositoryImpl, usersService: UsersServiceImpl,
-                                   userJSON: UserJSONImpl, cc: ControllerComponents) extends AbstractController(cc) {
+                               userJSON: UserJSONImpl, cc: ControllerComponents) extends AbstractController(cc) {
 
   implicit val format: OFormat[User] = Json.format[User]
 
@@ -23,6 +23,11 @@ class UserController @Inject()(userRepository: UserRepositoryImpl, usersService:
     def FormWithDuplicateLoginError: Future[Result] =
       Future.successful {
         BadRequest(Json.obj("login" -> "This login is already exist"))
+      }
+
+    def FormWithWrongLogin: Future[Result] =
+      Future.successful {
+        BadRequest(Json.obj("login" -> "There is no user with this login"))
       }
 
     def FormWithUnexpectedError(ex: Throwable): Result =
@@ -102,17 +107,24 @@ class UserController @Inject()(userRepository: UserRepositoryImpl, usersService:
 
     userJson.validate[User] match {
       case JsSuccess(user, _) =>
-        usersService.checkUserPassword(user.login, user.password).map { correctPassword =>
-          if (correctPassword) {
-            Redirect(routes.ToDoListController.getTasks).withCookies(Cookie("userLogin", user.login))
+        userJSON.checkUserByLogin(userJson).flatMap { userExists =>
+          if (userExists) {
+            usersService.checkUserPassword(user.login, user.password).map { correctPassword =>
+              if (correctPassword) {
+                Redirect(routes.ToDoListController.getTasks).withCookies(Cookie("userLogin", user.login))
+              } else {
+                FormWithInvalidPassword
+              }
+            }.recover {
+              case ex: Throwable =>
+                FormWithUnexpectedError(ex)
+            }
           } else {
-            FormWithInvalidPassword
+            FormWithWrongLogin
           }
-        }.recover {
-          case ex: Throwable =>
-            FormWithUnexpectedError(ex)
         }
-      case JsError(_) =>
+      case JsError(_)
+      =>
         InvalidUserJson
     }
   }
